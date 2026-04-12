@@ -2,6 +2,11 @@
 dimension: 16:9
 toplevel-attributes: enter="~duration:0" slip down="~duration:0 title-anchor" unreveal="repo-link"
 ---
+<style>
+body {
+    font-size: 42px;
+}
+</style>
 
 {#title}
 # Polymorphic bottom-up weighted relational programming
@@ -31,77 +36,37 @@ toplevel-attributes: enter="~duration:0" slip down="~duration:0 title-anchor" un
 -----
 ## Introducing *semiringKanren*:
 
-**miniKanren**{style="float:left"} **semiringKanren**{style="float:right"}
-
-<br />
+semiringKanren is a *relational programming language*.
 
 {pause}
-[top-down evaluation]{style="float:left"}
-[bottom-up evaluation]{style="float:right"}
-
-<br />
+Relations take values, and either *succeed* or *fail* for those values. semiringKanren computes success/failure for all possible values.
 
 {pause}
-[relations compute functions on streams]{style="float:left"}
-[relations compute multidimensional arrays]{style="float:right"}
-
-<br />
+Relations are defined in terms of *primitive relations* and *connectives*. Collectively, we call these *goals*.
 
 {pause}
-[dynamically typed (s-expressions)]{style="float:left"}
-[statically typed (algebraic data types)]{style="float:right"}
-
-<br />
-
-{pause}
-[usually unweighted]{style="float:left"}
-[weighted]{style="float:right"}
-
-<br />
-
-{pause}
-[shallow embedding]{style="float:left"}
-[deep embedding]{style="float:right"}
-
-<br />
-
-{style="float:none"}
-
-<br />
-
-
-{pause}
-{#coin-flip-minikanren}
-{unreveal="coin-flip-semiringkanren"}
 {center}
-{.example title="Coin flip - miniKanren"}
----
-```
-(defrel (coin-flip c)
-  (disj
-    (== c 'heads)
-    (== c 'tails)))
-(run* (coin) (coin-flip coin))
-```
-Returns `'heads` and `'tails`.
-
 {#coin-flip-semiringkanren}
 {.example title="Coin flip - semiringKanren"}
 ---
+Aim to write a unary relation expressing coin flip results. 
+
 Represent heads as `(left sole)` and tails as `(right sole)`.
+
+
 ```
 (defrel (coin-flip (c : (Sum Unit Unit)))
   (disj
-    (fresh (u : Unit)
-      (lefto ((c : (Sum Unit Unit)) (u : Unit))))
-    (fresh (u : Unit)
-      (righto ((c : (Sum Unit Unit)) (u : Unit))))))
-
-(run ((coin : (Sum Unit Unit))) (coin-flip coin))
+    (== c (left sole))
+    (== c (right sole))))
 ```
-Returns `(left sole)` for heads, and `(right sole)` for tails.
+
+Here, `disj` is a connective, and `==` is a primitive relation.
+
+This succeeds for both `(left sole)` and `(right sole)`; both "heads" and "tails" are possible results of a coin flip.
 
 ---
+{pause}
 {up}
 {unreveal="weighted-coin-flip"}
 semiringKanren variables are typed.
@@ -123,18 +88,46 @@ semiringKanren variables are typed.
 
 ; example: Boolean type
 (define Bool (Sum Unit Unit))
-(define true (left sole))
-(define false (right unit))
+(define false (left sole))
+(define true (right unit))
 ```
 
-{reveal="coin-flip-semiringkanren"}
-{down="coin-flip-semiringkanren"}
+{pause}
+{center}
 
-{center="coin-flip-minikanren"}
+We use `(Num n)` as shorthand for recursively constructed sum types of size n, and numbers to represent values of that type.
+
+For example, the values of type <br /> `(Num 4) = (Sum Unit (Sum Unit (Sum Unit Unit)))` are:
+- `0 = (left sole)`
+- `1 = (right (left sole))`
+- `2 = (right (right (left sole)))`
+- `3 = (right (right (right sole)))`
+
+{pause}
+{up}
+semiringKanren programs are *weighted*.
+
+{.example title="Weighted coin flip"}
+---
+```
+(defrel (weighted-coin-flip (coin : (Sum Unit Unit)))
+  (disj
+    (conj
+      (factor 0.7)
+      (== coin (left sole))
+    (conj
+      (factor 0.3)
+      (== coin (right sole))
+```
+
+This represents weighted coin flip results, where "heads" has weight 0.7, and "tails" has weight 0.3.
+
+---
 
 {pause}
 {center="semirings"}
-`(factor w)` adds "weight" to a program branch, where `w` is a semiring element.
+
+`(factor w)` adds weight to a program branch, where `w` is drawn from a *commutative semiring*.
 
 {#semirings}
 {.definition title="Semirings"}
@@ -151,32 +144,11 @@ Examples: real numbers with addition and multiplication, booleans with $\vee$ an
  
 ---
 
-{pause}
-{center}
-{.example title="Weighted coin flip"}
----
-Assuming some semiring over $\mathbb{R}$:
-
-```
-(defrel (unfair (coin : (Sum Unit Unit)))
-  (disj
-    (conj
-      (factor 0.7)
-      (fresh ((u : Unit)) (lefto coin u)))
-    (conj
-      (factor 0.3)
-      (fresh ((u : Unit)) (righto coin u)))))
-
-(run ((coin : (Sum Unit Unit))) (unfair coin))
-```
-
-This returns `(left sole)` with weight 0.7, and `(right sole)` with weight 0.3.
-
----
+Nonzero weights are treated as successes, and zero values are treated as failures.
 
 {up}
 {pause}
-semiringKanren supports recursion!
+semiringKanren supports recursive relations!
 
 {.example title="Transitive closure"}
 ---
@@ -186,7 +158,7 @@ Represent a graph as a relation between nodes (pseudo-syntax):
 ![](transitive-closure-graph.jpg)
 
 ```
-(defrel (grapho (x : Num) (y : Num))
+(defrel (graph (x : Num) (y : Num))
   (disj
     (conj (== x 0) (== y 1))
     (conj (== x 1) (== y 0))
@@ -199,21 +171,21 @@ Represent a graph as a relation between nodes (pseudo-syntax):
 We can express connectivity (or "transitive closure") in this graph as a recursive relation:
 
 ```
-(defrel (connecto (x : Num) (y : Num))
+(defrel (connect (x : Num) (y : Num))
   (disj
-    (grapho x y)
+    (graph x y)
     (fresh ((z : Num))
       (conj
-        (connecto x z)
-        (connecto z y)))))
+        (connect x z)
+        (connect z y)))))
 ```
 {pause}
 {center}
 {#run-transitive-closure}
-```
-(run ((x : Num) (y : Num)) (connecto x y))
-```
-The results change depending on the semiring. For the boolean semiring, we get reachability:
+Note we use the `fresh` connective here, to introduce a *fresh variable*.
+
+{pause}
+The results change for different semirings. For booleans, we get reachability:
 
 ![](transitive-closure-graph.jpg){style="float:right"}
 
@@ -415,7 +387,7 @@ If we consider a relation where only one variable is conditioned:
 
 ```
 (defrel (one-specific-bool (x : Bool) (y : Bool))
-  (trueo x))
+  (== x true))
 ```
 
 {pause}
@@ -444,7 +416,7 @@ Then the values for each variable are restricted/unrestricted accordingly:
 
 {center}
 {pause}
-How do we use these relation arrays in practice?
+How do we construct and use these relation arrays in practice?
 
 {pause}
 {reveal="goals-are-operations-2"}
@@ -455,8 +427,8 @@ There are two classes of goals:
 
 {pause}
 {#relation-goals}
-> ## Low-level relations
-> `soleo`, `lefto`, `righto`, `pairo`, `==`, `=/=`, `succeed`, `fail`, `factor`,<br />and relation application
+> ## Primitive relations
+> `==`, `=/=`, `succeed`, `fail`, `factor`, and relation application
 
 {pause}
 {#combine-goals}
@@ -491,50 +463,6 @@ There are two classes of goals:
 ```
 
 {pause}
-{center}
-
-[`(lefto y x)`]{style="float:left"}
-```math
-\begin{bmatrix}
-    \begin{matrix}
-        1 & 0 \\
-        0 & 1 \\
-    \end{matrix} &&
-    \begin{matrix} \huge{0} & & \end{matrix}
-\end{bmatrix}
-```
-
-[`(righto y x)`]{style="float:left"}
-```math
-\begin{bmatrix}
-    \begin{matrix} & & \huge{0} \end{matrix}&&
-    \begin{matrix}
-        1 & 0 \\
-        0 & 1 \\
-    \end{matrix}
-\end{bmatrix}
-```
-
-{pause}
-{center}
-[`(pairo y x _)`]{style="float:left"}
-```math
-\begin{bmatrix}
-1 & 1 & 0 & 0 \\
-0 & 0 & 1 & 1
-\end{bmatrix}
-```
-
-[`(pairo y _ x)`]{style="float:left"}
-```math
-\begin{bmatrix}
-1 & 0 & 1 & 0 \\
-0 & 1 & 0 & 1
-\end{bmatrix}
-```
-
-{pause}
-{center}
 [`(factor 120)`]{style="float:left"}
 ```math
 \begin{bmatrix}
@@ -545,7 +473,7 @@ There are two classes of goals:
 ```
 
 {pause}
-
+{center}
 `succeed` is `(factor 1)`, `fail` is `(factor 0)`.
 
 {pause}
@@ -612,7 +540,7 @@ Relation application unifies argument variables with precalculated relation arra
 {center}
 `fresh` uses summation:
 ```math
-(\text{fresh}\;(x:\dots)\;
+(\text{fresh}\;((x:\dots))\;
 \begin{bmatrix}
 0 & 1 & 2 \\
 0 & 1 & 2 \\
@@ -647,13 +575,13 @@ Repeat until there's no new information - program execution by *fixpoint*.
 Recall transitive closure example with $(\mathbb{R}^\infty,\min,+)$: [![](transitive-closure-graph.jpg)]{style="float:right"}
 
 ```
-(defrel (connecto (x : Num) (y : Num))
+(defrel (connect (x : Num) (y : Num))
   (disj
-    (grapho x y)
+    (graph x y)
     (fresh ((z : Num))
       (conj
-        (connecto x z)
-        (connecto z y)))))
+        (connect x z)
+        (connect z y)))))
 ```
 
 {pause}
@@ -672,7 +600,7 @@ First assume nothing: [![](transitive-closure-graph.jpg)]{style="float:right"}
 
 {pause}
 {center}
-`connecto` calls fail, but `grapho` calls do not:
+`connect` calls fail, but `graph` calls do not:
 ```math
 \begin{bmatrix}
 \infty & 1 & \infty & \infty \\
@@ -694,31 +622,233 @@ Now we can consider intermediate vertices:
 \end{bmatrix}
 ```
 
-Re-evaluating `connecto` gets the same result. All done! [![](transitive-closure-graph.jpg)]{style="float:right"}
+Re-evaluating `connect` gets the same result. All done! [![](transitive-closure-graph.jpg)]{style="float:right"}
 
 ---
 
 {pause}
 {down}
 > This is "bottom-up evaluation", similar to Datalog.
+>
+> Note we can approximate nonterminating recursions by computing the fixpoint up to bounded precision.
 > <br /> <br />
 
 {slip}
 {pause}
 -----
 
-<!-- brief explanation of compiling to SAT, and how compiling to bitstrings works -->
-
------
-
 <!--  introduce polymorphic version of the language, with example programs -->
 
-<!-- show example of program that behaves differently depending on type size -->
+{top}
+## Polymorphic semiringKanren
 
-<!-- introduce concepts of "minimum viable relation" and wrapping calls -->
+semiringKanren supports *polymorphic relations*; relations which take in values of unknown types (represented with *type variables*).
 
-<!-- show example specific example of program compiled in this way, maybe? -->
+{pause}
+{up}
+{.example title="Option map"}
+{#ex-option-map}
+---
+```
+(defrel (option-map
+  (f : (Prod α β)) (x : (Sum Unit α)) (y : (Sum Unit β)))
+  (disj
+    (conj (== x (left sole)) (== y (left sole)))
+    (fresh ((a : α) (b : β))
+      (conj
+        (== x (right a))
+        (== f (pair a b))
+        (== y (right b))))))
 
-<!-- show construction of minimum viable relation, and wrapped calls -->
+(defrel (main (x : (Sum Unit (Num 4))) (y : (Sum Unit (Num 4))))
+  (fresh ((a : Bool) (b : Bool))
+    (conj
+      (=/= a b)
+      (option-map (pair a b) x y))))
+```
 
-<!-- brief summary of why it works, including need for commutative idempotent semiring addition -->
+{pause}
+{down="ex-option-map"}
+`main` gets denoted as:
+
+```math
+\begin{bmatrix}
+    1 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 1 & 1 \\
+    0 & 1 & 0 & 1 & 1 \\
+    0 & 1 & 1 & 0 & 1 \\
+    0 & 1 & 1 & 1 & 0
+\end{bmatrix}
+```
+---
+
+{pause}
+{center}
+How is `option-map` denoted?
+
+{pause}
+semiringKanren compiles polymorphic programs to non-polymorphic programs.
+
+{pause}
+{up}
+{.example title="Option map - compiled"}
+---
+{#compiled-option-map}
+```
+(defrel (option-map
+          (f : (Prod (Num 3) (Num 3)))
+          (x : (Sum Unit (Num 3)))
+          (y : (Sum Unit (Num 3))))
+  (disj
+    (conj (== x (left sole)) (== y (left sole)))
+    (fresh ((a : (Num 3)) (b : (Num 3)))
+      (conj
+        (== x (right a))
+        (== f (pair a b))
+        (== y (right b))))))
+```
+
+{pause}
+Within `main`, the relation call `(option-map (pair a b) x y)` compiles to:
+
+{pause}
+{down}
+{#compiled-option-map-call}
+{style="font-size:38px"}
+```
+(fresh ((om-f : (Prod (Num 3) (Num 3)))
+  (om-x : (Sum Unit (Num 3))) (om-y : (Sum Unit (Num 3))))
+  (conj
+    (option-map om-f om-x om-y)
+    (fresh ((om-f-hd : (Num 3)) (om-x-right : (Num 3))
+      (f-hd : Bool) (x-right : Bool))
+      (conj
+        (== (pair om-f-hd _) om-f) (== (right om-x-right) om-x)
+        (== (pair f-hd _) (pair a b)) (== (right x-right) x)
+        (disj
+          (conj (== om-f-hd om-x-right) (== f-hd x-right))
+          (conj (=/= om-f-hd om-x-right) (=/= f-hd x-right)))))
+    (fresh ((om-f-tl : (Num 3)) (om-y-right : (Num 3))
+      (f-tl : Bool) (y-right : Bool))
+      (conj
+        (== (pair _ om-f-tl) om-f) (== (right om-y-right) om-y)
+        (== (pair _ f-tl) (pair a b)) (== (right y-right) y)
+        (disj
+          (conj (== om-f-tl om-y-right) (== f-tl y-right))
+          (conj (=/= om-f-tl om-y-right) (=/= f-tl y-right)))))))
+```
+---
+
+{pause}
+{center}
+Type variables in polymorphic relations are converted into concrete types.
+
+{center="compiled-option-map"}
+
+{pause}
+{center}
+Polymorphic relation calls extract the *equality patterns* of variable-typed values, and enforce those patterns on the arguments.
+
+{down="compiled-option-map-call"}
+
+{up="ex-option-map"}
+
+{pause}
+{center}
+Given `α = (Num 3)` and `β = (Num 3)`, `option-map` has the denotation:
+
+```math
+\begin{bmatrix}
+    1 & \begin{matrix} 0 & 0 & 0 \end{matrix} \\
+    \begin{matrix} 0 \\ 0 \\ 0 \end{matrix} & \begin{matrix} \huge{f} \end{matrix}
+\end{bmatrix}
+```
+
+Note this is actually a 3-dimensional array, with the third dimension corresponding to $f$. <br/>
+`f : (Prod (Num 3) (Num 3))`, so the size of the third dimension is 9.
+
+<br />
+
+{pause}
+{center}
+How does semiringKanren determine the specific concrete types for type variables?
+
+The concretized need to be encompass any possible equality pattern.
+
+{pause}
+In the most extreme case, all occurrences of a type variable are disequal. We need a type large enough so all type variable occurrences can have different values.
+
+So, we just need to count the maximum number of occurrences of a type variable.
+
+{up="ex-option-map"}
+
+{center="compiled-option-map"}
+
+<br />
+
+{pause}
+{up}
+All done?
+
+{pause}
+{.example title="Two-valued type"}
+{#ex-two-valued}
+---
+```
+(defrel (two-valued (x : α))
+  (fresh ((y : α))
+    (=/= x y)))
+```
+
+`α = (Num 2)`, so this always succeeds, so the denotation is $\begin{bmatrix} 1 & 1 \end{bmatrix}$.
+
+{pause}
+{center}
+Then the call `(two-valued sole)` compiles to:
+
+```
+(fresh ((tv-x : (Num 2)))
+  (conj
+    (two-valued tv-x)
+    (disj
+      (conj (== tv-x tv-x) (== sole sole))
+      (conj (=/= tv-x tv-x) (=/= sole sole)))))
+```
+
+which succeeds.
+
+{pause}
+{down="ex-two-valued"}
+
+But "morally," `(two-valued sole)` should be equivalent to:
+```
+(fresh ((y : Unit))
+    (=/= sole y)))
+```
+
+{up="ex-two-valued"}
+
+{pause}
+{down="ex-two-valued"}
+
+```
+(=/= sole sole)
+```
+
+which should fail!
+---
+
+{pause}
+{center}
+So we also need to generate smaller versions of the polymorphic relations.
+
+<br />
+
+{slip}
+{pause}
+-----
+
+## Formalization
+
+
+
