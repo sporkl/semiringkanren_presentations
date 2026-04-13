@@ -144,7 +144,7 @@ Examples: real numbers with addition and multiplication, booleans with $\vee$ an
  
 ---
 
-Nonzero weights are treated as successes, and zero values are treated as failures.
+Nonzero weights are treated as successes, and zero is treated as failure.
 
 {up}
 {pause}
@@ -432,7 +432,7 @@ There are two classes of goals:
 
 {pause}
 {#combine-goals}
-> ## Goal combinators
+> ## Connectives
 > `conj`, `disj`, `fresh`.
 
 {pause}
@@ -483,7 +483,7 @@ Relation application unifies argument variables with precalculated relation arra
 {pause}
 {center}
 {#goal-combinators-2}
-> ## Goal combinators
+> ## Connectives
 > `conj`, `disj`, `fresh`.
 
 {pause}
@@ -773,7 +773,7 @@ Note this is actually a 3-dimensional array, with the third dimension correspond
 {center}
 How does semiringKanren determine the specific concrete types for type variables?
 
-The concretized need to be encompass any possible equality pattern.
+The concretized types need to be encompass any possible equality pattern.
 
 {pause}
 In the most extreme case, all occurrences of a type variable are disequal. We need a type large enough so all type variable occurrences can have different values.
@@ -848,7 +848,184 @@ So we also need to generate smaller versions of the polymorphic relations.
 {pause}
 -----
 
-## Formalization
+## Formalization (overview)
 
+Variable types are tracked in *type environments*, notated $\Delta$.
 
+Variable values are tracked in *value environments*, notated $\delta$.
 
+{pause}
+
+A value environment $\delta = x_1 \mapsto v_1, \dots, x_n \mapsto v_n$ <br />
+has a corresponding type environment $\Delta = x_1 : \tau_1, \dots, x_n : \tau_n$ <br />
+when $v_i : \sigma(\tau_i)$ for some type variable substitution $\sigma$.
+
+{pause}
+
+We write $[\![ e ]\!] (\delta)$ for "the denotation of the value of $e$ under value environment $\delta$."
+
+{.example title="Pair of x"}
+---
+$[\![ \mathtt{(pair}\;x\;x\mathtt{)} ]\!] (x \mapsto \mathtt{sole}) = \mathtt{(pair\;sole\;sole)}$
+---
+
+{pause}
+{center}
+
+We say value environments $\delta_1, \delta_2$ have the same *equality pattern*, notated $\delta_1 \leftrightharpoons_\Delta \delta_2$, when:
+
+- The "concrete" parts, or *shells*, of both environments are equal.
+- Let $h_1, k_1$ be values in $\delta_1$ corresponding to variable-typed parts of $\Delta$ ("*holes*").<br/>Let $h_2, k_2$ be corresponding values in $\delta_2$. Then:
+    - $h_1 = k_1$ and $h_2 = k_2$, or
+    - $h_1 \ne k_1$ and $h_2 \ne k_2$.
+
+{pause}
+{center}
+
+{.example title="Equality patterns"}
+---
+Consider $\Delta = x : \mathtt{(Sum\;\alpha\;\alpha), y : \alpha}$.
+
+Does the following hold? ($\alpha = \mathtt{sole}$)
+```math
+x \mapsto \mathtt{(left \; sole)}, y \mapsto \mathtt{sole} \; \leftrightharpoons_\Delta \; x \mapsto \mathtt{(right \; sole), y \mapsto \mathtt{sole}}
+```
+
+{pause}
+
+No, because the shells of $x$, $\mathtt{(left \; \dots)}$ and $\mathtt{(right \; \dots)}$ are not equal.
+
+{pause}
+{center}
+
+Does the following hold? ($\alpha = \mathtt{Bool}$)
+```math
+x \mapsto \mathtt{(left \; true)}, y \mapsto \mathtt{false} \; \leftrightharpoons_\Delta \; x \mapsto \mathtt{(left \; true), y \mapsto \mathtt{true}}
+```
+
+{pause}
+
+No, because the holes are disequal under $\delta_1$ ($\mathtt{true} \ne \mathtt{false}$), but are equal under $\delta_2$ ($\mathtt{true} = \mathtt{true}$).
+
+{pause}
+{center}
+
+Does the following hold? ($\alpha = \mathtt{Bool}$)
+```math
+x \mapsto \mathtt{(left \; true)}, y \mapsto \mathtt{false} \; \leftrightharpoons_\Delta \; x \mapsto \mathtt{(left \; false), y \mapsto \mathtt{true}}
+```
+
+{pause}
+
+Yes! The holes are disequal both under $\delta_1$ ($\mathtt{true} \ne \mathtt{false}$), and under $\delta_2$ <br />($\mathtt{false} \ne \mathtt{true}$).
+
+{pause}
+{center}
+
+Does the following hold? ($\sigma_1(\alpha) = \mathtt{Bool}, \sigma_2(\alpha) = \mathtt{Unit}$)
+```math
+x \mapsto \mathtt{(left \; false)}, y \mapsto \mathtt{false} \; \leftrightharpoons_\Delta \; x \mapsto \mathtt{(left \; sole), y \mapsto \mathtt{sole}}
+```
+
+{pause}
+
+Yes! The holes are equal both under $\delta_1$ ($\mathtt{false} = \mathtt{false}$), and under $\delta_2$ <br />($\mathtt{sole} = \mathtt{sole}$).
+---
+
+{pause}
+{center}
+
+Let $[\![g]\!](\eta;\delta)$ denote the *weight* of goal $g$ under relation environment $\eta$ and value environment $\delta$.
+
+{pause}
+
+{.theorem}
+---
+If $[\![g]\!](\eta;\delta_1) = w$ and $\delta_1 \leftrightharpoons_\Delta \delta_2$, then $[\![g]\!](\eta;\delta_2) = w$.
+---
+
+{pause}
+(Proof in progress...)
+
+{pause}
+{center}
+
+Consider the case $g = \mathtt{(fresh \; ((x:\tau)) \; g')}$.
+
+{pause}
+
+```math
+[\![g]\!](\eta; \delta) = \sum_{i \in \tau} [\![g']\!](\eta; \delta,x \mapsto i)
+```
+
+{pause}
+
+What if $\tau = \alpha$?
+
+{pause}
+{center}
+
+```math
+\sum_{i \in \sigma_1(\tau)} [\![g']\!](\eta; \delta_1,x \mapsto i) = w_1 + \dots + w_m
+```
+```math
+\sum_{j \in \sigma_2(\tau)} [\![g']\!](\eta; \delta_2,x \mapsto j) = w'_1 + \dots + w'_n
+```
+```math
+w_1 + \dots + w_m \stackrel{?}{=} w'_1 + \dots + w'_n
+```
+
+{pause}
+{center}
+
+Let $\#_\alpha \Delta$ denote the number of occurrences of values of type $\alpha$ in $\Delta$.
+
+Assuming $\sigma(\alpha)$ is large enough, we know $i$ can be either equal or disequal to $\alpha$-holes in $\delta$.
+Thus $[\![g']\!](\eta; \delta,x \mapsto i)$ inhabits at most $\#_\alpha \Delta$ possible weights.
+
+{pause}
+
+We can show $\delta_1,x \mapsto i \leftrightharpoons_\Delta \delta_2, x \mapsto j$.
+So by the inductive hypothesis, the inhabited weight values are the same.
+
+{pause}
+{center}
+
+Let $r_1, \dots, r_k$ be the weight values. Commutative semiring, so can rearrange:
+
+```math
+\sum_{i \in \sigma_1(\tau)} [\![g']\!](\eta; \delta_1,x \mapsto i) = (r_1 + \dots) + \dots + (r_k + \dots)
+```
+```math
+\sum_{j \in \sigma_2(\tau)} [\![g']\!](\eta; \delta_2,x \mapsto j) = (r_1 + \dots\dots) + \dots + (r_k + \dots\dots)
+```
+```math
+(r_1 + \dots) + \dots + (r_k + \dots) \stackrel{?}{=} (r_1 + \dots\dots) + \dots + (r_k + \dots\dots)
+```
+
+{pause}
+{center}
+
+What now?
+
+{pause}
+
+Also require semiring addition to be *idempotent*. ($x + x = x$)
+
+Then:
+```math
+(r_1 + \dots) + \dots + (r_k + \dots) = r_1 + \dots + r_k = (r_1 + \dots\dots) + \dots + (r_k + \dots\dots)
+```
+
+{pause}
+{center}
+
+So: 
+```math
+\sum_{i \in \sigma_1(\tau)} [\![g']\!](\eta; \delta_1,x \mapsto i) = \sum_{j \in \sigma_2(\tau)} [\![g']\!](\eta; \delta_2,x \mapsto j)
+```
+
+And so $[\![\mathtt{(fresh \; ((x:\tau)) \; g')}]\!](\eta,\delta_1) = [\![\mathtt{(fresh \; ((x:\tau)) \; g')}]\!](\eta,\delta_2)$.
+
+{center="~duration:5 authors"}
+{reveal="repo-link"}

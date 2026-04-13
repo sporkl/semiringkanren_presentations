@@ -2065,7 +2065,7 @@ a * (b + c) = (a * b) + (b * c)
 &lt;p&gt;&lt;span&gt;Examples: real numbers with addition and multiplication, booleans with &lt;/span&gt;\(\vee\)&lt;span&gt; and &lt;/span&gt;\(\wedge\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div&gt;
-&lt;p&gt;&lt;span&gt;Nonzero weights are treated as successes, and zero values are treated as failures.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;Nonzero weights are treated as successes, and zero is treated as failure.&lt;/span&gt;&lt;/p&gt;
 &lt;p up-at-unpause pause&gt;&lt;span&gt;semiringKanren supports recursive relations!&lt;/span&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&quot;example&quot; title=&quot;Transitive closure&quot;&gt;
@@ -2335,7 +2335,7 @@ a * (b + c) = (a * b) + (b * c)
 &lt;p&gt;&lt;code&gt;==&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;=/=&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;succeed&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;fail&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;factor&lt;/code&gt;&lt;span&gt;, and relation application&lt;/span&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&quot;combine-goals&quot; pause&gt;
-&lt;h2 id=&quot;goal-combinators&quot;&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#goal-combinators&quot;&gt;&lt;/a&gt;&lt;span&gt;Goal combinators&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;connectives&quot;&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#connectives&quot;&gt;&lt;/a&gt;&lt;span&gt;Connectives&lt;/span&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;conj&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;disj&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;fresh&lt;/code&gt;&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div pause static-at-unpause=&quot;relation-goals&quot; unstatic-at-unpause=&quot;combine-goals&quot; up-at-unpause=&quot;relation-goals&quot;&gt;&lt;/div&gt;
@@ -2369,7 +2369,7 @@ a * (b + c) = (a * b) + (b * c)
 &lt;div pause&gt;&lt;/div&gt;
 &lt;p&gt;&lt;span&gt;Relation application unifies argument variables with precalculated relation array variables.&lt;/span&gt;&lt;/p&gt;
 &lt;div id=&quot;goal-combinators-2&quot; center-at-unpause pause&gt;
-&lt;h2 id=&quot;goal-combinators-1&quot;&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#goal-combinators-1&quot;&gt;&lt;/a&gt;&lt;span&gt;Goal combinators&lt;/span&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;connectives-1&quot;&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#connectives-1&quot;&gt;&lt;/a&gt;&lt;span&gt;Connectives&lt;/span&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;conj&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;disj&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;fresh&lt;/code&gt;&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div pause up-at-unpause=&quot;goal-combinators-2&quot;&gt;&lt;/div&gt;
@@ -2581,7 +2581,7 @@ a * (b + c) = (a * b) + (b * c)
 &lt;code&gt;f : (Prod (Num 3) (Num 3))&lt;/code&gt;&lt;span&gt;, so the size of the third dimension is 9.&lt;/span&gt;&lt;/p&gt;
 &lt;br /&gt;
 &lt;p pause center-at-unpause&gt;&lt;span&gt;How does semiringKanren determine the specific concrete types for type variables?&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span&gt;The concretized need to be encompass any possible equality pattern.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;The concretized types need to be encompass any possible equality pattern.&lt;/span&gt;&lt;/p&gt;
 &lt;p pause&gt;&lt;span&gt;In the most extreme case, all occurrences of a type variable are disequal. We need a type large enough so all type variable occurrences can have different values.&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;&lt;span&gt;So, we just need to count the maximum number of occurrences of a type variable.&lt;/span&gt;&lt;/p&gt;
 &lt;div up-at-unpause=&quot;ex-option-map&quot;&gt;&lt;/div&gt;
@@ -2626,7 +2626,128 @@ a * (b + c) = (a * b) + (b * c)
 &lt;div class=&quot;slipshow-rescaler&quot; pause slip enter-at-unpause&gt;
 &lt;div class=&quot;slip&quot;&gt;
 &lt;div class=&quot;slip-body&quot;&gt;
-&lt;h2 id=&quot;formalization&quot;&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#formalization&quot;&gt;&lt;/a&gt;&lt;span&gt;Formalization&lt;/span&gt;&lt;/h2&gt;
+&lt;div&gt;
+&lt;div&gt;
+&lt;h2 id=&quot;formalization-overview&quot;&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#formalization-overview&quot;&gt;&lt;/a&gt;&lt;span&gt;Formalization (overview)&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;span&gt;Variable types are tracked in &lt;/span&gt;&lt;em&gt;&lt;span&gt;type environments&lt;/span&gt;&lt;/em&gt;&lt;span&gt;, notated &lt;/span&gt;\(\Delta\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;Variable values are tracked in &lt;/span&gt;&lt;em&gt;&lt;span&gt;value environments&lt;/span&gt;&lt;/em&gt;&lt;span&gt;, notated &lt;/span&gt;\(\delta\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;A value environment &lt;/span&gt;\(\delta = x_1 \mapsto v_1, \dots, x_n \mapsto v_n\)&lt;span&gt; &lt;/span&gt;&lt;br /&gt;
+&lt;span&gt;has a corresponding type environment &lt;/span&gt;\(\Delta = x_1 : \tau_1, \dots, x_n : \tau_n\)&lt;span&gt; &lt;/span&gt;&lt;br /&gt;
+&lt;span&gt;when &lt;/span&gt;\(v_i : \sigma(\tau_i)\)&lt;span&gt; for some type variable substitution &lt;/span&gt;\(\sigma\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;We write &lt;/span&gt;\([\![ e ]\!] (\delta)\)&lt;span&gt; for &amp;quot;the denotation of the value of &lt;/span&gt;\(e\)&lt;span&gt; under value environment &lt;/span&gt;\(\delta\)&lt;span&gt;.&amp;quot;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;example&quot; title=&quot;Pair of x&quot;&gt;
+&lt;p&gt;\([\![ \mathtt{(pair}\;x\;x\mathtt{)} ]\!] (x \mapsto \mathtt{sole}) = \mathtt{(pair\;sole\;sole)}\)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;We say value environments &lt;/span&gt;\(\delta_1, \delta_2\)&lt;span&gt; have the same &lt;/span&gt;&lt;em&gt;&lt;span&gt;equality pattern&lt;/span&gt;&lt;/em&gt;&lt;span&gt;, notated &lt;/span&gt;\(\delta_1 \leftrightharpoons_\Delta \delta_2\)&lt;span&gt;, when:&lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span&gt;The &amp;quot;concrete&amp;quot; parts, or &lt;/span&gt;&lt;em&gt;&lt;span&gt;shells&lt;/span&gt;&lt;/em&gt;&lt;span&gt;, of both environments are equal.&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span&gt;Let &lt;/span&gt;\(h_1, k_1\)&lt;span&gt; be values in &lt;/span&gt;\(\delta_1\)&lt;span&gt; corresponding to variable-typed parts of &lt;/span&gt;\(\Delta\)&lt;span&gt; (&amp;quot;&lt;/span&gt;&lt;em&gt;&lt;span&gt;holes&lt;/span&gt;&lt;/em&gt;&lt;span&gt;&amp;quot;).&lt;/span&gt;&lt;br/&gt;&lt;span&gt;Let &lt;/span&gt;\(h_2, k_2\)&lt;span&gt; be corresponding values in &lt;/span&gt;\(\delta_2\)&lt;span&gt;. Then:&lt;/span&gt;
+&lt;ul&gt;
+&lt;li&gt;\(h_1 = k_1\)&lt;span&gt; and &lt;/span&gt;\(h_2 = k_2\)&lt;span&gt;, or&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;\(h_1 \ne k_1\)&lt;span&gt; and &lt;/span&gt;\(h_2 \ne k_2\)&lt;span&gt;.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;example&quot; title=&quot;Equality patterns&quot;&gt;
+&lt;p&gt;&lt;span&gt;Consider &lt;/span&gt;\(\Delta = x : \mathtt{(Sum\;\alpha\;\alpha), y : \alpha}\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;Does the following hold? (&lt;/span&gt;\(\alpha = \mathtt{sole}\)&lt;span&gt;)&lt;/span&gt;&lt;/p&gt;
+\[
+x \mapsto \mathtt{(left \; sole)}, y \mapsto \mathtt{sole} \; \leftrightharpoons_\Delta \; x \mapsto \mathtt{(right \; sole), y \mapsto \mathtt{sole}}
+\]
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;No, because the shells of &lt;/span&gt;\(x\)&lt;span&gt;, &lt;/span&gt;\(\mathtt{(left \; \dots)}\)&lt;span&gt; and &lt;/span&gt;\(\mathtt{(right \; \dots)}\)&lt;span&gt; are not equal.&lt;/span&gt;&lt;/p&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Does the following hold? (&lt;/span&gt;\(\alpha = \mathtt{Bool}\)&lt;span&gt;)&lt;/span&gt;&lt;/p&gt;
+\[
+x \mapsto \mathtt{(left \; true)}, y \mapsto \mathtt{false} \; \leftrightharpoons_\Delta \; x \mapsto \mathtt{(left \; true), y \mapsto \mathtt{true}}
+\]
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;No, because the holes are disequal under &lt;/span&gt;\(\delta_1\)&lt;span&gt; (&lt;/span&gt;\(\mathtt{true} \ne \mathtt{false}\)&lt;span&gt;), but are equal under &lt;/span&gt;\(\delta_2\)&lt;span&gt; (&lt;/span&gt;\(\mathtt{true} = \mathtt{true}\)&lt;span&gt;).&lt;/span&gt;&lt;/p&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Does the following hold? (&lt;/span&gt;\(\alpha = \mathtt{Bool}\)&lt;span&gt;)&lt;/span&gt;&lt;/p&gt;
+\[
+x \mapsto \mathtt{(left \; true)}, y \mapsto \mathtt{false} \; \leftrightharpoons_\Delta \; x \mapsto \mathtt{(left \; false), y \mapsto \mathtt{true}}
+\]
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Yes! The holes are disequal both under &lt;/span&gt;\(\delta_1\)&lt;span&gt; (&lt;/span&gt;\(\mathtt{true} \ne \mathtt{false}\)&lt;span&gt;), and under &lt;/span&gt;\(\delta_2\)&lt;span&gt; &lt;/span&gt;&lt;br /&gt;&lt;span&gt;(&lt;/span&gt;\(\mathtt{false} \ne \mathtt{true}\)&lt;span&gt;).&lt;/span&gt;&lt;/p&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Does the following hold? (&lt;/span&gt;\(\sigma_1(\alpha) = \mathtt{Bool}, \sigma_2(\alpha) = \mathtt{Unit}\)&lt;span&gt;)&lt;/span&gt;&lt;/p&gt;
+\[
+x \mapsto \mathtt{(left \; false)}, y \mapsto \mathtt{false} \; \leftrightharpoons_\Delta \; x \mapsto \mathtt{(left \; sole), y \mapsto \mathtt{sole}}
+\]
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Yes! The holes are equal both under &lt;/span&gt;\(\delta_1\)&lt;span&gt; (&lt;/span&gt;\(\mathtt{false} = \mathtt{false}\)&lt;span&gt;), and under &lt;/span&gt;\(\delta_2\)&lt;span&gt; &lt;/span&gt;&lt;br /&gt;&lt;span&gt;(&lt;/span&gt;\(\mathtt{sole} = \mathtt{sole}\)&lt;span&gt;).&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Let &lt;/span&gt;\([\![g]\!](\eta;\delta)\)&lt;span&gt; denote the &lt;/span&gt;&lt;em&gt;&lt;span&gt;weight&lt;/span&gt;&lt;/em&gt;&lt;span&gt; of goal &lt;/span&gt;\(g\)&lt;span&gt; under relation environment &lt;/span&gt;\(\eta\)&lt;span&gt; and value environment &lt;/span&gt;\(\delta\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;div pause&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;theorem&quot;&gt;
+&lt;p&gt;&lt;span&gt;If &lt;/span&gt;\([\![g]\!](\eta;\delta_1) = w\)&lt;span&gt; and &lt;/span&gt;\(\delta_1 \leftrightharpoons_\Delta \delta_2\)&lt;span&gt;, then &lt;/span&gt;\([\![g]\!](\eta;\delta_2) = w\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;p pause&gt;&lt;span&gt;(Proof in progress...)&lt;/span&gt;&lt;/p&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Consider the case &lt;/span&gt;\(g = \mathtt{(fresh \; ((x:\tau)) \; g')}\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;div pause&gt;&lt;/div&gt;
+\[
+[\![g]\!](\eta; \delta) = \sum_{i \in \tau} [\![g']\!](\eta; \delta,x \mapsto i)
+\]
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;What if &lt;/span&gt;\(\tau = \alpha\)&lt;span&gt;?&lt;/span&gt;&lt;/p&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+\[
+\sum_{i \in \sigma_1(\tau)} [\![g']\!](\eta; \delta_1,x \mapsto i) = w_1 + \dots + w_m
+\]
+\[
+\sum_{j \in \sigma_2(\tau)} [\![g']\!](\eta; \delta_2,x \mapsto j) = w'_1 + \dots + w'_n
+\]
+\[
+w_1 + \dots + w_m \stackrel{?}{=} w'_1 + \dots + w'_n
+\]
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Let &lt;/span&gt;\(\#_\alpha \Delta\)&lt;span&gt; denote the number of occurrences of values of type &lt;/span&gt;\(\alpha\)&lt;span&gt; in &lt;/span&gt;\(\Delta\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;Assuming &lt;/span&gt;\(\sigma(\alpha)\)&lt;span&gt; is large enough, we know &lt;/span&gt;\(i\)&lt;span&gt; can be either equal or disequal to &lt;/span&gt;\(\alpha\)&lt;span&gt;-holes in &lt;/span&gt;\(\delta\)&lt;span&gt;.&lt;/span&gt;
+&lt;span&gt;Thus &lt;/span&gt;\([\![g']\!](\eta; \delta,x \mapsto i)\)&lt;span&gt; inhabits at most &lt;/span&gt;\(\#_\alpha \Delta\)&lt;span&gt; possible weights.&lt;/span&gt;&lt;/p&gt;
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;We can show &lt;/span&gt;\(\delta_1,x \mapsto i \leftrightharpoons_\Delta \delta_2, x \mapsto j\)&lt;span&gt;.&lt;/span&gt;
+&lt;span&gt;So by the inductive hypothesis, the inhabited weight values are the same.&lt;/span&gt;&lt;/p&gt;
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Let &lt;/span&gt;\(r_1, \dots, r_k\)&lt;span&gt; be the weight values. Commutative semiring, so can rearrange:&lt;/span&gt;&lt;/p&gt;
+\[
+\sum_{i \in \sigma_1(\tau)} [\![g']\!](\eta; \delta_1,x \mapsto i) = (r_1 + \dots) + \dots + (r_k + \dots)
+\]
+\[
+\sum_{j \in \sigma_2(\tau)} [\![g']\!](\eta; \delta_2,x \mapsto j) = (r_1 + \dots\dots) + \dots + (r_k + \dots\dots)
+\]
+\[
+(r_1 + \dots) + \dots + (r_k + \dots) \stackrel{?}{=} (r_1 + \dots\dots) + \dots + (r_k + \dots\dots)
+\]
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;What now?&lt;/span&gt;&lt;/p&gt;
+&lt;div pause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;Also require semiring addition to be &lt;/span&gt;&lt;em&gt;&lt;span&gt;idempotent&lt;/span&gt;&lt;/em&gt;&lt;span&gt;. (&lt;/span&gt;\(x + x = x\)&lt;span&gt;)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;Then:&lt;/span&gt;&lt;/p&gt;
+\[
+(r_1 + \dots) + \dots + (r_k + \dots) = r_1 + \dots + r_k = (r_1 + \dots\dots) + \dots + (r_k + \dots\dots)
+\]
+&lt;div pause center-at-unpause&gt;&lt;/div&gt;
+&lt;p&gt;&lt;span&gt;So:&lt;/span&gt;&lt;/p&gt;
+\[
+\sum_{i \in \sigma_1(\tau)} [\![g']\!](\eta; \delta_1,x \mapsto i) = \sum_{j \in \sigma_2(\tau)} [\![g']\!](\eta; \delta_2,x \mapsto j)
+\]
+&lt;p&gt;&lt;span&gt;And so &lt;/span&gt;\([\![\mathtt{(fresh \; ((x:\tau)) \; g')}]\!](\eta,\delta_1) = [\![\mathtt{(fresh \; ((x:\tau)) \; g')}]\!](\eta,\delta_2)\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;div center-at-unpause=&quot;~duration:5 authors&quot; reveal-at-unpause=&quot;repo-link&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
