@@ -107,7 +107,7 @@ The `(Sum A B)` type is recursively defined from other types, and has two constr
 
 For example, `(right sole) : (Sum (Num 2) Unit)` denotes $\begin{bmatrix} 0 & 0 & 1 \end{bmatrix}$.
 
-$|A|$ denotes the size of the type, or how many values inhabit the type.
+The size of type $A$ (notated $|A|$) is how many values inhabit the type.
 
 {pause}
 `(Num n)` is shorthand for a recursively constructed sum type of size $n$.
@@ -290,7 +290,7 @@ Connectives: `conj`, `disj`, `fresh`.
 `conj` uses semiring multiplication:
 
 ```math
-(\text{conj}\;
+\mathtt{(conj\;
 \begin{bmatrix}
 2 & 2 & 2 \\
 1 & 1 & 1 \\
@@ -301,7 +301,7 @@ Connectives: `conj`, `disj`, `fresh`.
 0 & 1 & 2 \\
 0 & 1 & 2 \\
 0 & 1 & 2
-\end{bmatrix})
+\end{bmatrix})}
 \leadsto
 \begin{bmatrix}
 0 & 2 & 4 \\
@@ -314,7 +314,7 @@ Connectives: `conj`, `disj`, `fresh`.
 
 `disj` uses semiring addition:
 ```math
-(\text{disj}\;
+\mathtt{(disj\;
 \begin{bmatrix}
 2 & 2 & 2 \\
 1 & 1 & 1 \\
@@ -325,7 +325,7 @@ Connectives: `conj`, `disj`, `fresh`.
 0 & 1 & 2 \\
 0 & 1 & 2 \\
 0 & 1 & 2
-\end{bmatrix})
+\end{bmatrix})}
 \leadsto
 \begin{bmatrix}
 2 & 3 & 4 \\
@@ -337,12 +337,12 @@ Connectives: `conj`, `disj`, `fresh`.
 {pause}
 `fresh` uses summation:
 ```math
-(\text{fresh}\;((x:\dots))\;
+\mathtt{(fresh\;((x:(Num \;3)))\;
 \begin{bmatrix}
 0 & 1 & 2 \\
 0 & 1 & 2 \\
 0 & 1 & 2
-\end{bmatrix})
+\end{bmatrix})}
 \leadsto
 \begin{bmatrix}
 0 & 3 & 6
@@ -401,7 +401,7 @@ How can we denote `sum-swap` when we don't know how big `α` or `β` are?
 {center}
 
 Would we expect `(sum-swap (left 0) (right 1))` to succeed or fail? <br />
-(with `α = (Num 2)`, `β = (Num 3)`) 
+(with `α = (Num 3)`, `β = (Num 4)`) 
 
 {pause}
 What about `(sum-swap (left 0) (left 0))`?<br />
@@ -417,8 +417,8 @@ What is the denotation of this relation?
 {style="float:left"}
 ```
 (defrel (specific-sum-swap
-  (x : (Sum (Num 2) (Num 3)))
-  (y : (Sum (Num 3) (Num 2))))
+  (x : (Sum (Num 3) (Num 4)))
+  (y : (Sum (Num 4) (Num 3))))
   (sum-swap x y))
 ```
 

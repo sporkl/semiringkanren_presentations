@@ -2037,7 +2037,7 @@ body {
 &lt;li&gt;&lt;code&gt;(right y)&lt;/code&gt;&lt;span&gt;, which denotes &lt;/span&gt;\(\begin{bmatrix} 0 \stackrel{|A|}{\dots} \end{bmatrix} \oplus y\)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;span&gt;For example, &lt;/span&gt;&lt;code&gt;(right sole) : (Sum (Num 2) Unit)&lt;/code&gt;&lt;span&gt; denotes &lt;/span&gt;\(\begin{bmatrix} 0 &amp;amp; 0 &amp;amp; 1 \end{bmatrix}\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;\(|A|\)&lt;span&gt; denotes the size of the type, or how many values inhabit the type.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;The size of type &lt;/span&gt;\(A\)&lt;span&gt; (notated &lt;/span&gt;\(|A|\)&lt;span&gt;) is how many values inhabit the type.&lt;/span&gt;&lt;/p&gt;
 &lt;p pause&gt;&lt;code&gt;(Num n)&lt;/code&gt;&lt;span&gt; is shorthand for a recursively constructed sum type of size &lt;/span&gt;\(n\)&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;p pause down-at-unpause&gt;&lt;span&gt;(semiringKanren also has product types, which denote &lt;/span&gt;\(\otimes\)&lt;span&gt;)&lt;/span&gt;&lt;/p&gt;
 &lt;br /&gt;
@@ -2160,7 +2160,7 @@ a * (b + c) = (a * b) + (b * c)
 &lt;div pause up-at-unpause=&quot;goal-combinators-2&quot;&gt;&lt;/div&gt;
 &lt;p&gt;&lt;code&gt;conj&lt;/code&gt;&lt;span&gt; uses semiring multiplication:&lt;/span&gt;&lt;/p&gt;
 \[
-(\text{conj}\;
+\mathtt{(conj\;
 \begin{bmatrix}
 2 &amp;amp; 2 &amp;amp; 2 \\
 1 &amp;amp; 1 &amp;amp; 1 \\
@@ -2171,7 +2171,7 @@ a * (b + c) = (a * b) + (b * c)
 0 &amp;amp; 1 &amp;amp; 2 \\
 0 &amp;amp; 1 &amp;amp; 2 \\
 0 &amp;amp; 1 &amp;amp; 2
-\end{bmatrix})
+\end{bmatrix})}
 \leadsto
 \begin{bmatrix}
 0 &amp;amp; 2 &amp;amp; 4 \\
@@ -2182,7 +2182,7 @@ a * (b + c) = (a * b) + (b * c)
 &lt;div pause&gt;&lt;/div&gt;
 &lt;p&gt;&lt;code&gt;disj&lt;/code&gt;&lt;span&gt; uses semiring addition:&lt;/span&gt;&lt;/p&gt;
 \[
-(\text{disj}\;
+\mathtt{(disj\;
 \begin{bmatrix}
 2 &amp;amp; 2 &amp;amp; 2 \\
 1 &amp;amp; 1 &amp;amp; 1 \\
@@ -2193,7 +2193,7 @@ a * (b + c) = (a * b) + (b * c)
 0 &amp;amp; 1 &amp;amp; 2 \\
 0 &amp;amp; 1 &amp;amp; 2 \\
 0 &amp;amp; 1 &amp;amp; 2
-\end{bmatrix})
+\end{bmatrix})}
 \leadsto
 \begin{bmatrix}
 2 &amp;amp; 3 &amp;amp; 4 \\
@@ -2203,12 +2203,12 @@ a * (b + c) = (a * b) + (b * c)
 \]
 &lt;p pause&gt;&lt;code&gt;fresh&lt;/code&gt;&lt;span&gt; uses summation:&lt;/span&gt;&lt;/p&gt;
 \[
-(\text{fresh}\;((x:\dots))\;
+\mathtt{(fresh\;((x:(Num \;3)))\;
 \begin{bmatrix}
 0 &amp;amp; 1 &amp;amp; 2 \\
 0 &amp;amp; 1 &amp;amp; 2 \\
 0 &amp;amp; 1 &amp;amp; 2
-\end{bmatrix})
+\end{bmatrix})}
 \leadsto
 \begin{bmatrix}
 0 &amp;amp; 3 &amp;amp; 6
@@ -2257,7 +2257,7 @@ a * (b + c) = (a * b) + (b * c)
 &lt;div&gt;
 &lt;div pause center-at-unpause&gt;&lt;/div&gt;
 &lt;p&gt;&lt;span&gt;Would we expect &lt;/span&gt;&lt;code&gt;(sum-swap (left 0) (right 1))&lt;/code&gt;&lt;span&gt; to succeed or fail? &lt;/span&gt;&lt;br /&gt;
-&lt;span&gt;(with &lt;/span&gt;&lt;code&gt;α = (Num 2)&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;β = (Num 3)&lt;/code&gt;&lt;span&gt;)&lt;/span&gt;&lt;/p&gt;
+&lt;span&gt;(with &lt;/span&gt;&lt;code&gt;α = (Num 3)&lt;/code&gt;&lt;span&gt;, &lt;/span&gt;&lt;code&gt;β = (Num 4)&lt;/code&gt;&lt;span&gt;)&lt;/span&gt;&lt;/p&gt;
 &lt;p pause&gt;&lt;span&gt;What about &lt;/span&gt;&lt;code&gt;(sum-swap (left 0) (left 0))&lt;/code&gt;&lt;span&gt;?&lt;/span&gt;&lt;br /&gt;
 &lt;span pause&gt;&lt;/span&gt;
 &lt;span&gt;Or &lt;/span&gt;&lt;code&gt;(sum-swap (left 0) (right 0))&lt;/code&gt;&lt;span&gt;?&lt;/span&gt;&lt;/p&gt;
@@ -2265,8 +2265,8 @@ a * (b + c) = (a * b) + (b * c)
 &lt;/div&gt;
 &lt;div id=&quot;specific-sum-swap&quot;&gt;
 &lt;pre style=&quot;float:left&quot;&gt;&lt;code&gt;(defrel (specific-sum-swap
-  (x : (Sum (Num 2) (Num 3)))
-  (y : (Sum (Num 3) (Num 2))))
+  (x : (Sum (Num 3) (Num 4)))
+  (y : (Sum (Num 4) (Num 3))))
   (sum-swap x y))
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p style=&quot;float:right&quot;&gt;\(\begin{bmatrix} 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 \\ 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \end{bmatrix}\)&lt;/p&gt;
