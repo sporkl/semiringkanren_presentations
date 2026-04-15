@@ -675,5 +675,26 @@ So:
 
 And so $[\![\mathtt{(fresh \; ((x:\tau)) \; g')}]\!](\eta,\delta_1) = [\![\mathtt{(fresh \; ((x:\tau)) \; g')}]\!](\eta,\delta_2)$.
 
+{pause}
+{slip}
+-----
+
+## Conclusion
+
+- First bottom-up relational language to implement non-monomorphizing polymorphism
+{pause}
+- Can compile to SAT solver for efficient evaluation over boolean semiring
+{pause}
+- Future work
+    - Recursive types?
+    - Higher-order relations? (can encode $\mathtt{(R : A \; B \rightarrow)}$ as $\mathtt{(Prod \; A \; B)}$ if used linearly)
+    - Fixpoint convergence under different semirings?
+    - Applications
+    - Generalize SAT solver to SMT, to handle other semirings
+    - Other evaluation strategies (quantum? sparse arrays?)
+
+{pause}
+(It can't generate quines yet so it's not a "real" kanren)
+
 {center="~duration:5 authors"}
 {reveal="repo-link"}
