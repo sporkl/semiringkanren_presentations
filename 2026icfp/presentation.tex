@@ -1,0 +1,75 @@
+\documentclass{beamer}
+
+\usepackage{amsmath}
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{decorations.pathreplacing}
+
+\begin{document}
+
+\begin{frame}
+
+	\begin{align*}
+		\begin{bmatrix}
+			0 & 0 & 0 & 1 & 0 & 0 \\
+			0 & 0 & 0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 1 \\
+			1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 & 0 & 0 \\
+			0 & 0 & \tikzmarknode{sumswap3-52}{1} & 0 & 0 & 0 \\
+		\end{bmatrix}
+		&&
+		\begin{bmatrix}
+			0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+			1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & \tikzmarknode{sumswap4-73}{1} & 0 & 0 & 0 & 0 \\
+		\end{bmatrix}
+	\end{align*}
+
+	\begin{align*}
+		\begin{aligned}
+		x &\mapsto \tikzmarknode{sumswap3-52vals}{} \texttt{(\tikzmarknode{sumswap3xright}{right} \tikzmarknode{sumswap3xrighthole}{\(\underline{\mathtt{2_3}}\))}} \\
+		y &\mapsto \texttt{(\tikzmarknode{sumswap3yleft}{left} \tikzmarknode{sumswap3ylefthole}{\(\underline{\mathtt{2_3}}\))}}
+		\end{aligned}
+		&&
+		\begin{aligned}
+		x &\mapsto \tikzmarknode{sumswap4-73vals}{} \texttt{(\tikzmarknode{sumswap4xright}{right} \tikzmarknode{sumswap4xrighthole}{\(\underline{\mathtt{3_4}}\))}} \\
+		y &\mapsto \texttt{(\tikzmarknode{sumswap4yleft}{left} \tikzmarknode{sumswap4ylefthole}{\(\underline{\mathtt{3_4}}\))}}
+		\end{aligned}
+	\end{align*}
+	
+	\begin{center}
+		\tikzmarknode{xisright}{\(x\) is \texttt{(right \(\dots\))}}
+		\hfill
+		\tikzmarknode{yisleft}{\(y\) is \texttt{(left \(\dots\))}}
+		\hfill
+		\tikzmarknode{betasequal}{\(\beta\)-typed parts equal}
+	\end{center}
+
+	\begin{tikzpicture}[remember picture,overlay]
+		\draw[->, shorten <=1mm, shorten >=3mm] (sumswap3-52) to (sumswap3-52vals);
+		\draw[->, shorten <=1mm, shorten >=3mm] (sumswap4-73) to (sumswap4-73vals);
+
+		% \draw[->] (sumswap3xright.north) to[bend right=10, out=-90, in=-90] (xisright);
+		\draw[->] (sumswap3xright.north) to[bend right=115] (xisright);
+		\draw[->] (sumswap4xright.north) to[bend right, in=-90] (xisright);
+
+		\draw[->] ([yshift=-1mm]sumswap3yleft.south) to (yisleft);
+		\draw[->] ([yshift=-1mm]sumswap4yleft.south) to (yisleft);
+
+		\draw[decorate, decoration=brace] (sumswap3xrighthole.north east) to node(2eq2)[right] {\(\mathtt{2_3} = \mathtt{2_3}\)} (sumswap3xrighthole.east |- sumswap3ylefthole.south);
+		\draw[decorate, decoration=brace] (sumswap4xrighthole.north east) to node(3eq3)[right] {\(\mathtt{3_4} = \mathtt{3_4}\)} (sumswap4xrighthole.east |- sumswap4ylefthole.south);
+
+		\draw[->] (2eq2.south) -- (betasequal);
+		\draw[->] (3eq3.south) -- (betasequal);
+	\end{tikzpicture}
+
+\end{frame}
+
+\end{document}
