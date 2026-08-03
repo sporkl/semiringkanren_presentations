@@ -48,132 +48,171 @@
 		\end{matrix}
 	\end{align*}
 
-	Can represent the graph as a relation or as an adjacency matrix.\\
+	Represent graphs as relations or as adjacency matries.\\
 	semiringKanren computes matrices for arbitrary relations!
 
 \end{frame}
 
 \begin{frame}
 
-	semiringKanren values are drawn from algebraic data types.
-	
-	Let \(\texttt{x}\) be a value of type \(\alpha\), and \(\texttt{y}\) be a value of type \(\beta\).
-
-	We notate this as:
-	\begin{align*}
-		\texttt{x} : \alpha \\
-		\texttt{y} : \beta \\
-	\end{align*}
-
-	semiringKanren has the following value constructors and corresponding types:
-	\begin{itemize}
-		\item \(\texttt{sole} : \texttt{Unit}\)
-		\item \(\texttt{(left x)} : \texttt{(Sum \(\alpha\) \(\beta\))}\)
-		\item \(\texttt{(right y)} : \texttt{(Sum \(\alpha\) \(\beta\))}\)
-	\end{itemize}
-
-	(semiringKanren also has product types)
-
-\end{frame}
-
-\begin{frame}
-	
-	We abbreviate types by their size, and index values.
+	Built-in/primitive relations
 
 	\begin{align*}
-		\texttt{(Sum Unit (Sum Unit Unit))} &\mapsto \mathtt{3} \\
-		\texttt{(left sole)} &\mapsto \mathtt{0_3} \\
-		\texttt{(right (left sole))} &\mapsto \mathtt{1_3} \\
-		\texttt{(right (right sole))} &\mapsto \mathtt{2_3} \\
-	\end{align*}
-
-\end{frame}
-
-\begin{frame}
-
-	Relations denote arrays; entries correspond to argument values, and hold weights.
-	Here, weight 1 denotes success and weight 0 denotes failure.
-
-	\begin{align*}
-		& \texttt{(defrel (R (x : \(3\)))} \\
-		& \quad \texttt{(== x \(\mathtt{0_3}\)))} \\
-	\end{align*}
-
-	\begin{align*}
+		\texttt{(== x y)} && \texttt{(=/= x y)} \\
 		\begin{matrix}
-			\begin{matrix} \mathtt{0_3} & \mathtt{1_3} & \mathtt{2_3} \end{matrix} \\
-			\begin{bmatrix} 1 & 0 & 0 \end{bmatrix}
-		\end{matrix}
-	\end{align*}
-
-	(semiringKanren supports computing over weights drawn from any commutative semiring)
-
-\end{frame}
-
-\begin{frame}
-
-	\(\texttt{disj}\) is addition.
-
-	\begin{align*}
-		& \texttt{(defrel (R (x : \(3\)))} \\
-		& \quad \texttt{(disj} \\
-		& \quad\quad \texttt{(== x \(\mathtt{0_3}\))} \\
-		& \quad\quad \texttt{(== x \(\mathtt{2_3}\))))} \\
-	\end{align*}
-
-	\begin{align*}
-		\begin{bmatrix} 1 & 0 & 0 \end{bmatrix} + \begin{bmatrix} 0 & 0 & 1 \end{bmatrix} \\
-		\begin{matrix}
-			\begin{matrix} \mathtt{0_3} & \mathtt{1_3} & \mathtt{2_3} \end{matrix} \\
-			\begin{bmatrix} 1 & 0 & 1 \end{bmatrix}
-		\end{matrix}
-	\end{align*}
-
-\end{frame}
-
-\begin{frame}
-
-	\(\texttt{conj}\) is multiplication.
-
-	\begin{align*}
-		& \texttt{(defrel (R (x : \(3\)))} \\
-		& \quad \texttt{(conj} \\
-		& \quad\quad \texttt{(== x \(\mathtt{0_3}\))} \\
-		& \quad\quad \texttt{(== x \(\mathtt{2_3}\))))} \\
-	\end{align*}
-
-	\begin{align*}
-		\begin{bmatrix} 1 & 0 & 0 \end{bmatrix} * \begin{bmatrix} 0 & 0 & 1 \end{bmatrix} \\
-		\begin{matrix}
-			\begin{matrix} \mathtt{0_3} & \mathtt{1_3} & \mathtt{2_3} \end{matrix} \\
-			\begin{bmatrix} 0 & 0 & 0 \end{bmatrix}
-		\end{matrix}
-	\end{align*}
-
-\end{frame}
-
-\begin{frame}
-
-	Multi-argument relations denote multidimensional arrays.
-
-	\begin{align*}
-		& \texttt{(defrel (R (x : 3) (y : 3)} \\
-		& \quad \texttt{(== x y)))} \\
-	\end{align*}
-	\begin{align*}
-		\begin{matrix}
-			&
-			\begin{matrix} \mathtt{0_3} & \mathtt{1_3} & \mathtt{2_3} \end{matrix}
-			\\
-			\begin{matrix} \mathtt{0_3} \\ \mathtt{1_3} \\ \mathtt{2_3} \end{matrix}
-			&
+			& & y \\
+			& & \begin{matrix} 0 & 1 & 2 & 3 \end{matrix} \\
+			x & \begin{matrix} 0 \\ 1 \\ 2 \\ 3 \end{matrix} &
 			\begin{bmatrix}
-				1 & 0 & 0 \\
-				0 & 1 & 0 \\
-				0 & 0 & 1 \\
+				1 & 0 & 0 & 0 \\
+				0 & 1 & 0 & 0 \\
+				0 & 0 & 1 & 0 \\
+				0 & 0 & 0 & 1 \\
+			\end{bmatrix}
+		\end{matrix}
+		&&
+		\begin{matrix}
+			& & y \\
+			& & \begin{matrix} 0 & 1 & 2 & 3 \end{matrix} \\
+			x & \begin{matrix} 0 \\ 1 \\ 2 \\ 3 \end{matrix} &
+			\begin{bmatrix}
+				0 & 1 & 1 & 1 \\
+				1 & 0 & 1 & 1 \\
+				1 & 1 & 0 & 1 \\
+				1 & 1 & 1 & 0 \\
 			\end{bmatrix}
 		\end{matrix}
 	\end{align*}
+
+\end{frame}
+
+\begin{frame}
+	\(\texttt{disj}\) is addition
+
+	\begin{align*}
+		& \texttt{(defrel (r0 (x : (Num 4)) (y : (Num 4)))} \\
+		&\quad \texttt{(disj} \\
+		&\quad\quad \texttt{(== x 0)} \\
+		&\quad\quad \texttt{(== y 0)))} \\
+	\end{align*}
+
+	\begin{align*}
+		\begin{bmatrix}
+			1 & 1 & 1 & 1 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+		\end{bmatrix}
+		+
+		\begin{bmatrix}
+			1 & 0 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+		\end{bmatrix}
+		=
+		\begin{bmatrix}
+			2 & 1 & 1 & 1 \\
+			1 & 0 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+		\end{bmatrix}
+	\end{align*}
+
+\end{frame}
+
+\begin{frame}
+	\(\texttt{conj}\) is multiplication
+
+	\begin{align*}
+		& \texttt{(defrel (r1 (x : (Num 4)) (y : (Num 4)))} \\
+		&\quad \texttt{(disj} \\
+		&\quad\quad \texttt{(== x 0)} \\
+		&\quad\quad \texttt{(== y 0)))} \\
+	\end{align*}
+
+	\begin{align*}
+		\begin{bmatrix}
+			1 & 1 & 1 & 1 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+		\end{bmatrix}
+		*
+		\begin{bmatrix}
+			1 & 0 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+		\end{bmatrix}
+		=
+		\begin{bmatrix}
+			1 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+		\end{bmatrix}
+	\end{align*}
+
+\end{frame}
+
+\begin{frame}
+
+	\(\texttt{fresh}\) is summation
+
+	\begin{align*}
+		&\texttt{(defrel (r2 (y : (Num 4)))} \\
+		&\quad\texttt{(fresh (x : (Num 4))} \\
+		&\quad\quad\texttt{(conj (== x 0) (=/= y x))))}
+	\end{align*}
+
+	\begin{align*}
+		\sum_{x} \left(
+			\begin{bmatrix}
+				1 & 1 & 1 & 1 \\
+				0 & 0 & 0 & 0 \\
+				0 & 0 & 0 & 0 \\
+				0 & 0 & 0 & 0 \\
+			\end{bmatrix}
+			*
+			\begin{bmatrix}
+				0 & 1 & 1 & 1 \\
+				1 & 0 & 1 & 1 \\
+				1 & 1 & 0 & 1 \\
+				1 & 1 & 1 & 0 \\
+			\end{bmatrix}
+		\right)
+		=
+		\sum_{x}
+		\begin{bmatrix}
+			0 & 1 & 1 & 1 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+		\end{bmatrix}
+		\\
+		=
+		\begin{bmatrix}
+			0 & 1 & 1 & 1 \\
+		\end{bmatrix}
+	\end{align*}
+
+\end{frame}
+
+\begin{frame}
+
+	semiringKanren values inhabit algebraic data types.
+
+	\begin{align*}
+		\texttt{sole : Unit} && \begin{bmatrix} 1 \end{bmatrix} \\
+		\texttt{(left sole) : (Sum Unit (Num 4))} && \begin{bmatrix} 1 & 0 & 0 & 0 & 0 \end{bmatrix} \\
+		\texttt{(right 0) : (Sum Unit (Num 4))} && \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix} \\
+		\vdots \\
+		\texttt{(right 3) : (Sum Unit (Num 4))} && \begin{bmatrix} 0 & 0 & 0 & 0 & 1 \end{bmatrix} \\
+	\end{align*}
+
+	\(\texttt{(Num \(n\))}\) is shorthand for a sum type of \(n\) \(\texttt{Unit}\)s\\
+	(semiringKanren also supports product types)
 
 \end{frame}
 
