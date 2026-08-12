@@ -1,4 +1,5 @@
 \documentclass{beamer}
+\useoutertheme{tree}
 
 \usepackage{amsmath}
 
@@ -14,14 +15,54 @@
 
 \begin{document}
 
-\begin{frame}
+\begin{frame}[plain]
 	\titlepage
 \end{frame}
 
+\begin{frame}[label=slogan]
+	
+	\begin{center}
+		{\Huge \tikzmarknode{pun-all}{\underline{All}} for \tikzmarknode{pun-one}{\underline{one}} and \tikzmarknode{pun-none-forall}{\underline{none forall}}}
+	\end{center}
+
+	{\Huge \vspace{2ex}}
+
+	\begin{columns}
+		\column{0.33\textwidth}
+		\centering
+		\tikzmarknode{all-concrete-instances}{}\\
+		Represent all concrete instances of a polymorphic relation
+
+		\column{0.33\textwidth}
+		\centering
+		\tikzmarknode{single-concrete-instance}{}\\
+		using only a single concrete instance
+
+		\column{0.33\textwidth}
+		\centering
+		\tikzmarknode{compile-away-type-vars}{}\\
+		to compile away type variables
+	\end{columns}
+
+	\begin{tikzpicture}[remember picture, overlay]
+		\draw[->] (pun-all.south) to (all-concrete-instances);
+		\draw[->] (pun-one.south) to (single-concrete-instance);
+		\draw[->] (pun-none-forall.south) to (compile-away-type-vars);
+		% \draw[->] ([yshift=-1mm]sumswapa3b3yleft.south) to (yisleft);
+	\end{tikzpicture}
+
+\end{frame}
+
+\section{Introducing semiringKanren}
+
 \begin{frame}
+	\tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}[label=representing-relations]{Representing relations}
 
 	\begin{tikzpicture}
-		\graph[edges={bend left}] { 0 -> 1 -> 2 -> 3, 1 -> 0 };
+		\graph[edges={bend left}] { 0 -> 1 <- 2 -> 3, 1 -> 0 };
 	\end{tikzpicture}
 
 	\begin{align*}
@@ -30,8 +71,8 @@
 			&\quad \texttt{(from : (Num 4)) (to : (Num 4)))} \\
 			&\quad \texttt{(disj} \\
 			&\quad\quad \texttt{(conj (== from 0) (== to 1))} \\
-			&\quad\quad \texttt{(conj (== from 1) (== to 2))} \\
 			&\quad\quad \texttt{(conj (== from 1) (== to 0))} \\
+			&\quad\quad \texttt{(conj (== from 2) (== to 1))} \\
 			&\quad\quad \texttt{(conj (== from 2) (== to 3))))} \\
 		\end{aligned}
 		&&
@@ -41,8 +82,8 @@
 			\text{from} & \begin{matrix} 0 \\ 1 \\ 2 \\ 3 \end{matrix} &
 			\begin{bmatrix}
 				0 & 1 & 0 & 0 \\
-				1 & 0 & 1 & 0 \\
-				0 & 0 & 0 & 1 \\
+				1 & 0 & 0 & 0 \\
+				0 & 1 & 0 & 1 \\
 				0 & 0 & 0 & 0 \\
 			\end{bmatrix}
 		\end{matrix}
@@ -53,9 +94,7 @@
 
 \end{frame}
 
-\begin{frame}
-
-	Built-in/primitive relations
+\begin{frame}{Primitive relations}
 
 	\begin{align*}
 		\texttt{(== x y)} && \texttt{(=/= x y)} \\
@@ -86,8 +125,7 @@
 
 \end{frame}
 
-\begin{frame}
-	\(\texttt{disj}\) is addition
+\begin{frame}{\(\texttt{disj}\) is addition}
 
 	\begin{align*}
 		& \texttt{(defrel (r0 (x : (Num 4)) (y : (Num 4)))} \\
@@ -121,8 +159,7 @@
 
 \end{frame}
 
-\begin{frame}
-	\(\texttt{conj}\) is multiplication
+\begin{frame}{\(\texttt{conj}\) is multiplication}
 
 	\begin{align*}
 		& \texttt{(defrel (r1 (x : (Num 4)) (y : (Num 4)))} \\
@@ -156,66 +193,157 @@
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}{\(\texttt{fresh}\) is summation}
 
-	\(\texttt{fresh}\) is summation
+	Vertices with incoming edges. \hfill \tikz \graph[edges={bend left}] { 0 -> 1 <- 2 -> 3, 1 -> 0 };
 
 	\begin{align*}
-		&\texttt{(defrel (r2 (y : (Num 4)))} \\
+		&\texttt{(defrel (incoming-edge-vertices (y : (Num 4)))} \\
 		&\quad\texttt{(fresh (x : (Num 4))} \\
-		&\quad\quad\texttt{(conj (== x 0) (=/= y x))))}
+		&\quad\quad\texttt{(graph x y)))}
 	\end{align*}
 
 	\begin{align*}
-		\sum_{x} \left(
-			\begin{bmatrix}
-				1 & 1 & 1 & 1 \\
-				0 & 0 & 0 & 0 \\
-				0 & 0 & 0 & 0 \\
-				0 & 0 & 0 & 0 \\
-			\end{bmatrix}
-			*
-			\begin{bmatrix}
-				0 & 1 & 1 & 1 \\
-				1 & 0 & 1 & 1 \\
-				1 & 1 & 0 & 1 \\
-				1 & 1 & 1 & 0 \\
-			\end{bmatrix}
-		\right)
-		=
-		\sum_{x}
+		\sum_x 
 		\begin{bmatrix}
-			0 & 1 & 1 & 1 \\
-			0 & 0 & 0 & 0 \\
-			0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 \\
+			1 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 1 \\
 			0 & 0 & 0 & 0 \\
 		\end{bmatrix}
-		\\
 		=
-		\begin{bmatrix}
-			0 & 1 & 1 & 1 \\
-		\end{bmatrix}
+		\begin{bmatrix} 1 & 2 & 0 & 1 \end{bmatrix}
 	\end{align*}
 
 \end{frame}
+
+\begin{frame}{Types}
+
+	semiringKanren values inhabit finite algebraic data types.
+
+	\begin{align*}
+		\texttt{(left 0) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} \tikzmarknode{sumleftentry}{1} & \tikzmarknode{sumleftexit}{0} & \tikzmarknode{sumrightentry}{0} & 0 & \tikzmarknode{sumrightexit}{0} \end{bmatrix} \\
+		\texttt{(left 1) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix} \\
+		\texttt{(right 0) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 1 & 0 & 0 \end{bmatrix} \\
+		\texttt{(right 1) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 0 & 1 & 0 \end{bmatrix} \\
+		\texttt{(right 2) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 0 & 0 & 1 \end{bmatrix} \\
+	\end{align*}
+
+	(semiringKanren also supports unit and product types)
+
+	\begin{tikzpicture}[remember picture, overlay]
+		\draw[decorate, decoration=brace] ([yshift=1mm] sumleftentry.north west) to node(sumleft)[above] {\vphantom{g}left} ([yshift=1mm] sumleftexit.north east);
+		\draw[decorate, decoration=brace] ([yshift=1mm] sumrightentry.north west) to node(sumright)[above] {\vphantom{g}right} ([yshift=1mm] sumrightexit.north east);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Representing relations}
+
+	\begin{align*}
+		& \texttt{(defrel (graph (from : (Num 4)) (to : (Num 4)))} \\
+		&\quad \texttt{(disj} \\
+		&\quad\quad \tikzmarknode{01fromto}{}\texttt{(conj \tikzmarknode{01from}{(== from 0)} \tikzmarknode{01to}{(== to 1)})} \\
+		&\quad\quad \tikzmarknode{10fromto}{}\texttt{(conj \tikzmarknode{10from}{(== from 1)} \tikzmarknode{10to}{(== to 0)})} \\
+		&\quad\quad \texttt{(conj \tikzmarknode{21from}{(== from 2)} \tikzmarknode{21to}{(== to 1)})}\tikzmarknode{21fromto}{} \\
+		&\quad\quad \texttt{(conj \tikzmarknode{23from}{(== from 2)} \tikzmarknode{23to}{(== to 3)})))}\tikzmarknode{23fromto}{} \\
+	\end{align*}
+
+	\only<+>{
+		\begin{align*}
+			\tikzmarknode{01frommat}{\begin{bmatrix} 1 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
+			*
+			\tikzmarknode{01tomat}{\begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix}}
+			=
+			\begin{bmatrix}0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}
+		\end{align*}
+	}
+	
+	\only<+>{
+		\begin{align*}
+			\tikzmarknode{10frommat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 1 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
+			*
+			\tikzmarknode{10tomat}{\begin{bmatrix} 1 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 \end{bmatrix}}
+			=
+			\begin{bmatrix} 0 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}
+		\end{align*}
+	}
+
+	\only<+>{
+		\begin{align*}
+			\tikzmarknode{21frommat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
+			*
+			\tikzmarknode{21tomat}{\begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 \end{bmatrix}}
+			=
+			\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}
+		\end{align*}
+	}
+
+	\only<+>{
+		\begin{align*}
+			\tikzmarknode{23frommat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
+			*
+			\tikzmarknode{23tomat}{\begin{bmatrix} 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 1 \end{bmatrix}}
+			=
+			\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 \end{bmatrix}
+		\end{align*}
+	}
+
+	\only<+>{
+		\begin{align*}
+			\tikzmarknode{01fromtomat}{\begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
+			+
+			\tikzmarknode{10fromtomat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
+			+
+			\tikzmarknode{21fromtomat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
+			+
+			\tikzmarknode{23fromtomat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}}
+		\end{align*}
+	}
+
+	\only<+>{
+		\begin{align*}
+			\begin{bmatrix} 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}
+			&&
+			\text{\tikz \graph[edges={bend left}] { 0 -> 1 <- 2 -> 3, 1 -> 0 };}
+		\end{align*}
+	}
+
+	\begin{tikzpicture}[remember picture, overlay]
+		\node<1>[draw=orange, rectangle, fit=(01from), inner sep=0.5mm] {};
+		\node<1>[draw=orange, rectangle, fit=(01frommat), inner sep=0.5mm] {};
+		\node<1>[draw=blue, rectangle, fit=(01to), inner sep=0.5mm] {};
+		\node<1>[draw=blue, rectangle, fit=(01tomat), inner sep=0.5mm] {};
+
+		\node<2>[draw=orange, rectangle, fit=(10from), inner sep=0.5mm] {};
+		\node<2>[draw=orange, rectangle, fit=(10frommat), inner sep=0.5mm] {};
+		\node<2>[draw=blue, rectangle, fit=(10to), inner sep=0.5mm] {};
+		\node<2>[draw=blue, rectangle, fit=(10tomat), inner sep=0.5mm] {};
+
+		\node<3>[draw=orange, rectangle, fit=(21from), inner sep=0.5mm] {};
+		\node<3>[draw=orange, rectangle, fit=(21frommat), inner sep=0.5mm] {};
+		\node<3>[draw=blue, rectangle, fit=(21to), inner sep=0.5mm] {};
+		\node<3>[draw=blue, rectangle, fit=(21tomat), inner sep=0.5mm] {};
+
+		\node<4>[draw=orange, rectangle, fit=(23from), inner sep=0.5mm] {};
+		\node<4>[draw=orange, rectangle, fit=(23frommat), inner sep=0.5mm] {};
+		\node<4>[draw=blue, rectangle, fit=(23to), inner sep=0.5mm] {};
+		\node<4>[draw=blue, rectangle, fit=(23tomat), inner sep=0.5mm] {};
+
+		\draw<5>[->] (01fromto) to[bend right] (01fromtomat.north);
+		\draw<5>[->] (10fromto) to[out=225] (10fromtomat.north west);
+		\draw<5>[->] (21fromto) to[out=-15, in=45] (21fromtomat.north east);
+		\draw<5>[->] (23fromto) to[bend left] (23fromtomat.north);
+
+	\end{tikzpicture}
+
+\end{frame}
+
+\section{Polymorphic semiringKanren}
 
 \begin{frame}
-
-	semiringKanren values inhabit algebraic data types.
-
-	\begin{align*}
-		\texttt{sole : Unit} && \begin{bmatrix} 1 \end{bmatrix} \\
-		\texttt{(left sole) : (Sum Unit (Num 4))} && \begin{bmatrix} 1 & 0 & 0 & 0 & 0 \end{bmatrix} \\
-		\texttt{(right 0) : (Sum Unit (Num 4))} && \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix} \\
-		\vdots \\
-		\texttt{(right 3) : (Sum Unit (Num 4))} && \begin{bmatrix} 0 & 0 & 0 & 0 & 1 \end{bmatrix} \\
-	\end{align*}
-
-	\(\texttt{(Num \(n\))}\) is shorthand for a sum type of \(n\) \(\texttt{Unit}\)s\\
-	(semiringKanren also supports product types)
-
+	\tableofcontents[currentsection]
 \end{frame}
-
 
 \begin{frame}
 
@@ -260,7 +388,7 @@
 		\tikzmarknode{betasequal}{\(\beta\)-typed parts equal}
 	\end{center}
 
-	\begin{tikzpicture}[remember picture,overlay]
+	\begin{tikzpicture}[remember picture, overlay]
 
 		% \node[draw=red, rectangle, fit=()] {};
 
@@ -276,8 +404,8 @@
 		\draw[decorate, decoration=brace] (sumswapa3b3xrighthole.north east) to node(2eq2)[right] {\(\mathtt{2_3} = \mathtt{2_3}\)} (sumswapa3b3xrighthole.east |- sumswapa3b3ylefthole.south);
 		\draw[decorate, decoration=brace] (sumswapa3b4xrighthole.north east) to node(3eq3)[right] {\(\mathtt{3_4} = \mathtt{3_4}\)} (sumswapa3b4xrighthole.east |- sumswapa3b4ylefthole.south);
 
-		\draw[->] (2eq2.south) -- (betasequal);
-		\draw[->] (3eq3.south) -- (betasequal);
+		\draw[->] (2eq2.south) to (betasequal);
+		\draw[->] (3eq3.south) to (betasequal);
 	\end{tikzpicture}
 
 \end{frame}
