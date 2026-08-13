@@ -425,11 +425,11 @@
 				0 & 0 & 1 & 0 & 0 & 0 & 0 \\
 				\tikzmarknode{right2left0}{0} & 0 & 0 & \tikzmarknode{right3left3}{1} & 0 & 0 & 0 \\
 			\end{bmatrix} \\
-			\only<3>{
+			\only<2>{
 				x \mapsto \texttt{(left 0)} \\
 				y \mapsto \texttt{(right 0)}
 			}
-			\only<4>{
+			\only<3>{
 				x \mapsto \texttt{(right 3)} \\
 				y \mapsto \texttt{(left 3)}
 			}
@@ -437,14 +437,15 @@
 	\end{align*}
 
 	\begin{tikzpicture}[remember picture, overlay]
-		\node<2>[draw=orange, rectangle, fit=(defrel4), inner sep=0.5mm] {};
-		\node<2>[draw=orange, rectangle, fit=(x4), inner sep=0.5mm] {};
-		\node<2>[draw=orange, rectangle, fit=(y4), inner sep=0.5mm] {};
-		\node<2>[draw=orange, rectangle, fit=(b4), inner sep=0.5mm] {};
-		
-		\node<3>[draw=orange, rectangle, fit=(left0right0)] {};
+		\node<2>[draw=orange, rectangle, fit=(left0right0)] {};
 
-		\node<4>[draw=orange, rectangle, fit=(right3left3)] {};
+		\node<3>[draw=orange, rectangle, fit=(right3left3)] {};
+
+		\node<4>[draw=orange, rectangle, fit=(defrel4), inner sep=0.5mm] {};
+		\node<4>[draw=orange, rectangle, fit=(x4), inner sep=0.5mm] {};
+		\node<4>[draw=orange, rectangle, fit=(y4), inner sep=0.5mm] {};
+		\node<4>[draw=orange, rectangle, fit=(b4), inner sep=0.5mm] {};
+		
 	\end{tikzpicture}
 
 \end{frame}
@@ -569,6 +570,14 @@
 		\end{align*}
 	}
 
+	\only<10>{
+		Same success/failure results when:
+		\begin{itemize}
+			\item Non-variable typed parts are the same
+			\item Variable-typed parts have the same (dis)equalities
+		\end{itemize}
+	}
+
 	\begin{tikzpicture}[remember picture, overlay]
 
 		\node<2>[draw=orange, rectangle, fit=(33left0left0) (33left2left2), inner sep=0.5mm] {};
@@ -601,9 +610,7 @@
 
 		\node<9>[draw=orange, rectangle, rotate fit=45, fit=(33right0left1) (33right0left2) (33right1left2), inner sep=0.5mm] {};
 		\node<9>[draw=orange, rectangle, rotate fit=45, fit=(33right1left0) (33right2left0) (33right2left1), inner sep=0.5mm] {};
-		% \node<9>[draw=orange, rectangle, rotate fit=45, fit=(34right0left1) (34right0left3) (34right2left3), inner sep=0.5mm] {};
 		\draw<9>[orange] (34right0left1.north west) to (34right0left3.north east) to (34right2left3.south east) to (34right2left3.south west) to (34right0left1.south west) to cycle;
-		% \node<9>[draw=orange, rectangle, rotate fit=45, fit=(34right1left0) (34right3left0) (34right3left2), inner sep=0.5mm] {};
 		\draw<9>[orange](34right1left0.north west) to (34right3left0.south west) to (34right3left2.south east) to (34right3left2.north east) to (34right1left0.north east) to cycle;
 		\draw<9>[decorate, decoration=brace] (xrightbetafails.north east) to node[right]{\(\beta\)-typed parts disequal} (yleftbetafails.south east);
 
@@ -611,7 +618,7 @@
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Equality patterns}
 
 	\begin{align*}
 		\begin{bmatrix}
@@ -636,44 +643,258 @@
 
 	\begin{align*}
 		\begin{aligned}
-		x &\mapsto \tikzmarknode{sumswapa3b3-52vals}{} \texttt{(\tikzmarknode{sumswapa3b3xright}{right} \tikzmarknode{sumswapa3b3xrighthole}{\(\underline{\mathtt{2_3}}\))}} \\
-		y &\mapsto \texttt{(\tikzmarknode{sumswapa3b3yleft}{left} \tikzmarknode{sumswapa3b3ylefthole}{\(\underline{\mathtt{2_3}}\))}}
+			x &\mapsto \tikzmarknode{sumswapa3b3-52vals}{} \texttt{(\tikzmarknode{sumswapa3b3xright}{right} \tikzmarknode{sumswapa3b3xrighthole}{\underline{2}\(_\beta\))}} \\
+			y &\mapsto \texttt{(\tikzmarknode{sumswapa3b3yleft}{left} \tikzmarknode{sumswapa3b3ylefthole}{\underline{2}\(_\beta\))}}
 		\end{aligned}
 		&&
 		\begin{aligned}
-		x &\mapsto \tikzmarknode{sumswapa3b4-63vals}{} \texttt{(\tikzmarknode{sumswapa3b4xright}{right} \tikzmarknode{sumswapa3b4xrighthole}{\(\underline{\mathtt{3_4}}\))}} \\
-		y &\mapsto \texttt{(\tikzmarknode{sumswapa3b4yleft}{left} \tikzmarknode{sumswapa3b4ylefthole}{\(\underline{\mathtt{3_4}}\))}}
+			x &\mapsto \tikzmarknode{sumswapa3b4-63vals}{} \texttt{(\tikzmarknode{sumswapa3b4xright}{right} \tikzmarknode{sumswapa3b4xrighthole}{\underline{3}\(_\beta\))}} \\
+			y &\mapsto \texttt{(\tikzmarknode{sumswapa3b4yleft}{left} \tikzmarknode{sumswapa3b4ylefthole}{\underline{3}\(_\beta\))}}
 		\end{aligned}
 	\end{align*}
 	
 	\begin{center}
-		\tikzmarknode{xisright}{\(x\) is \texttt{(right \(\dots\))}}
-		\hfill
-		\tikzmarknode{yisleft}{\(y\) is \texttt{(left \(\dots\))}}
-		\hfill
-		\tikzmarknode{betasequal}{\(\beta\)-typed parts equal}
+		\uncover<2->{
+			\tikzmarknode{xisright}{\(x\) is \texttt{(right \(\dots\))}}
+		}
+		\uncover<3->{
+			\hfill
+			\tikzmarknode{yisleft}{\(y\) is \texttt{(left \(\dots\))}}
+		}
+		\uncover<4->{
+			\hfill
+			\tikzmarknode{betasequal}{\(\beta\)-typed parts equal}
+		}
 	\end{center}
 
 	\begin{tikzpicture}[remember picture, overlay]
 
 		% \node[draw=red, rectangle, fit=()] {};
 
+		\node[draw=orange, rectangle, fit=(sumswapa3b3-52), inner sep=0.5mm] {};
+		\node[draw=orange, rectangle, fit=(sumswapa3b4-63), inner sep=0.5mm] {};
+
 		\draw[->, shorten <=1mm, shorten >=3mm] (sumswapa3b3-52) to (sumswapa3b3-52vals);
 		\draw[->, shorten <=1mm, shorten >=3mm] (sumswapa3b4-63) to (sumswapa3b4-63vals);
 
-		\draw[->] (sumswapa3b3xright.north) to[bend right=115] (xisright);
-		\draw[->] (sumswapa3b4xright.north) to[bend right, in=-90] (xisright);
+		\draw<2->[->] (sumswapa3b3xright.north) to[bend right=115] (xisright);
+		\draw<2->[->] (sumswapa3b4xright.north) to[bend right, in=-90] (xisright);
 
-		\draw[->] ([yshift=-1mm]sumswapa3b3yleft.south) to (yisleft);
-		\draw[->] ([yshift=-1mm]sumswapa3b4yleft.south) to (yisleft);
+		\draw<3->[->] ([yshift=-1mm]sumswapa3b3yleft.south) to (yisleft);
+		\draw<3->[->] ([yshift=-1mm]sumswapa3b4yleft.south) to (yisleft);
 
-		\draw[decorate, decoration=brace] (sumswapa3b3xrighthole.north east) to node(2eq2)[right] {\(\mathtt{2_3} = \mathtt{2_3}\)} (sumswapa3b3xrighthole.east |- sumswapa3b3ylefthole.south);
-		\draw[decorate, decoration=brace] (sumswapa3b4xrighthole.north east) to node(3eq3)[right] {\(\mathtt{3_4} = \mathtt{3_4}\)} (sumswapa3b4xrighthole.east |- sumswapa3b4ylefthole.south);
+		\draw<4->[decorate, decoration=brace] (sumswapa3b3xrighthole.north east) to node(2eq2)[right] {\(\mathtt{2} = \mathtt{2}\)} (sumswapa3b3xrighthole.east |- sumswapa3b3ylefthole.south);
+		\draw<4->[decorate, decoration=brace] (sumswapa3b4xrighthole.north east) to node(3eq3)[right] {\(\mathtt{3} = \mathtt{3}\)} (sumswapa3b4xrighthole.east |- sumswapa3b4ylefthole.south);
 
-		\draw[->] (2eq2.south) to (betasequal);
-		\draw[->] (3eq3.south) to (betasequal);
+		\draw<4->[->] (2eq2.south) to (betasequal);
+		\draw<4->[->] (3eq3.south) to (betasequal);
 	\end{tikzpicture}
 
 \end{frame}
+
+\begin{frame}{Equality patterns}
+
+	\begin{align*}
+		\begin{bmatrix}
+			0 & 0 & 0 & 1 & 0 & 0 \\
+			0 & 0 & 0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 1 \\
+			1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 & 0 & 0 \\
+			0 & \tikzmarknode{sumswapa3b3-51}{0} & \tikzmarknode{sumswapa3b3-52}{1} & 0 & 0 & 0 \\
+		\end{bmatrix}
+		&&
+		\begin{bmatrix}
+			0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+			1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+			0 & 0 & \tikzmarknode{sumswapa3b4-62}{0} & \tikzmarknode{sumswapa3b4-63}{1} & 0 & 0 & 0 \\
+		\end{bmatrix}
+	\end{align*}
+
+	\begin{align*}
+		\begin{aligned}
+			x &\mapsto \tikzmarknode{sumswapa3b3-51vals}{} \texttt{(\tikzmarknode{sumswapa3b3xright}{right} \tikzmarknode{sumswapa3b3xrighthole}{\underline{2}\(_\beta\))}} \\
+			y &\mapsto \texttt{(\tikzmarknode{sumswapa3b3yleft}{left} \tikzmarknode{sumswapa3b3ylefthole}{\underline{1}\(_\beta\)})}
+		\end{aligned}
+		&&
+		\begin{aligned}
+			x &\mapsto \tikzmarknode{sumswapa3b4-62vals}{} \texttt{(\tikzmarknode{sumswapa3b4xright}{right} \tikzmarknode{sumswapa3b4xrighthole}{\underline{3}\(_\beta\))}} \\
+			y &\mapsto \texttt{(\tikzmarknode{sumswapa3b4yleft}{left} \tikzmarknode{sumswapa3b4ylefthole}{\underline{2}\(_\beta\)})}
+		\end{aligned}
+	\end{align*}
+	
+	\begin{center}
+		\uncover<2->{
+			\tikzmarknode{xisright}{\(x\) is \texttt{(right \(\dots\))}}
+		}
+		\uncover<3->{
+			\hfill
+			\tikzmarknode{yisleft}{\(y\) is \texttt{(left \(\dots\))}}
+		}
+		\uncover<4->{
+			\hfill
+			\tikzmarknode{betasequal}{\(\beta\)-typed parts disequal}
+		}
+	\end{center}
+
+	\begin{tikzpicture}[remember picture, overlay]
+
+		% \node[draw=red, rectangle, fit=()] {};
+
+		\node[draw=orange, rectangle, fit=(sumswapa3b3-51), inner sep=0.5mm] {};
+		\node[draw=orange, rectangle, fit=(sumswapa3b4-62), inner sep=0.5mm] {};
+
+		\draw[->, shorten <=1mm, shorten >=3mm] (sumswapa3b3-51) to (sumswapa3b3-51vals);
+		\draw[->, shorten <=1mm, shorten >=3mm] (sumswapa3b4-62) to (sumswapa3b4-62vals);
+
+		\draw<2->[->] (sumswapa3b3xright.north) to[bend right=115] (xisright);
+		\draw<2->[->] (sumswapa3b4xright.north) to[bend right, in=-90] (xisright);
+
+		\draw<3->[->] ([yshift=-1mm]sumswapa3b3yleft.south) to (yisleft);
+		\draw<3->[->] ([yshift=-1mm]sumswapa3b4yleft.south) to (yisleft);
+
+		\draw<4->[decorate, decoration=brace] (sumswapa3b3xrighthole.north east) to node(2eq2)[right] {\(\mathtt{2} \ne \mathtt{1}\)} (sumswapa3b3xrighthole.east |- sumswapa3b3ylefthole.south);
+		\draw<4->[decorate, decoration=brace] (sumswapa3b4xrighthole.north east) to node(3eq3)[right] {\(\mathtt{3} \ne \mathtt{2}\)} (sumswapa3b4xrighthole.east |- sumswapa3b4ylefthole.south);
+
+		\draw<4->[->] (2eq2.south) to (betasequal);
+		\draw<4->[->] (3eq3.south) to (betasequal);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Equality patterns}
+
+	\begin{align*}
+		\begin{bmatrix}
+			0 & 0 & 0 & 1 & 0 & 0 \\
+			0 & 0 & 0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 1 \\
+			1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 & 0 & 0 \\
+			0 & \tikzmarknode{sumswapa3b3-51}{0} & \tikzmarknode{sumswapa3b3-52}{1} & \tikzmarknode{sumswapa3b3-53}{0} & 0 & 0 \\
+		\end{bmatrix}
+		&&
+		\begin{bmatrix}
+			0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+			1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+			0 & 0 & \tikzmarknode{sumswapa3b4-62}{0} & \tikzmarknode{sumswapa3b4-63}{1} & \tikzmarknode{sumswapa3b4-64}{0} & 0 & 0 \\
+		\end{bmatrix}
+	\end{align*}
+
+	\begin{align*}
+		\begin{aligned}
+			x &\mapsto \tikzmarknode{sumswapa3b3-53vals}{} \texttt{(\tikzmarknode{sumswapa3b3xright}{right} \tikzmarknode{sumswapa3b3xrighthole}{\underline{2}\(_\beta\))}} \\
+			y &\mapsto \texttt{(\tikzmarknode{sumswapa3b3yright}{right} \tikzmarknode{sumswapa3b3yrighthole}{\underline{0}\(_\alpha\))}}
+		\end{aligned}
+		&&
+		\begin{aligned}
+			x &\mapsto \tikzmarknode{sumswapa3b4-64vals}{} \texttt{(\tikzmarknode{sumswapa3b4xright}{right} \tikzmarknode{sumswapa3b4xrighthole}{\underline{3}\(_\beta\))}} \\
+			y &\mapsto \texttt{(\tikzmarknode{sumswapa3b4yright}{right} \tikzmarknode{sumswapa3b4yrighthole}{\underline{0}\(_\alpha\))}}
+		\end{aligned}
+	\end{align*}
+	
+	\begin{center}
+		\uncover<2->{
+			\tikzmarknode{xisright}{\(x\) is \texttt{(right \(\dots\))}}
+		}
+		\uncover<3->{
+			\hfill
+			\tikzmarknode{yisright}{\(y\) is \texttt{(right \(\dots\))}}
+		}
+		\uncover<4->{
+			\hfill
+			\tikzmarknode{betasequal}{not applicable}
+		}
+	\end{center}
+
+	\begin{tikzpicture}[remember picture, overlay]
+
+		% \node[draw=red, rectangle, fit=()] {};
+
+		\node[draw=orange, rectangle, fit=(sumswapa3b3-53), inner sep=0.5mm] {};
+		\node[draw=orange, rectangle, fit=(sumswapa3b4-64), inner sep=0.5mm] {};
+
+		\draw[->, shorten <=1mm, shorten >=3mm] (sumswapa3b3-53) to (sumswapa3b3-53vals);
+		\draw[->, shorten <=1mm, shorten >=3mm] (sumswapa3b4-64) to (sumswapa3b4-64vals);
+
+		\draw<2->[->] (sumswapa3b3xright.north) to[bend right=115] (xisright);
+		\draw<2->[->] (sumswapa3b4xright.north) to[bend right, in=-90] (xisright);
+
+		\draw<3->[->] ([yshift=-1mm]sumswapa3b3yright.south) to (yisright);
+		\draw<3->[->] ([yshift=-1mm]sumswapa3b4yright.south) to (yisright);
+
+		\draw<4->[decorate, decoration=brace] (sumswapa3b3xrighthole.north east) to node(2eq2)[right,align=left] {different\\types} (sumswapa3b3xrighthole.east |- sumswapa3b3yrighthole.south);
+		\draw<4->[decorate, decoration=brace] (sumswapa3b4xrighthole.north east) to node(3eq3)[right,align=left] {different\\types} (sumswapa3b4xrighthole.east |- sumswapa3b4yrighthole.south);
+
+		\draw<4->[->] (2eq2.south) to (betasequal);
+		\draw<4->[->] (3eq3.south) to (betasequal);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Has disequality}
+
+	\begin{align*}
+		&\texttt{(defrel (has-disequality (y : \(\alpha\)))} \\
+		&\quad\texttt{(fresh (x : \(\alpha\))} \\
+		&\quad\quad\texttt{(=/= x y)))} \\
+	\end{align*}
+
+	\uncover<2->{
+		\begin{align*}
+			\alpha = 2 && \alpha = 1 \\
+			\tikzmarknode{has-disequality-alpha2}{\begin{bmatrix} 1 & 1 \end{bmatrix}} && \tikzmarknode{has-disequality-alpha1}{\begin{bmatrix} 0 \end{bmatrix}}
+		\end{align*}
+	}
+
+	\uncover<3->{
+		\begin{center}
+			\tikzmarknode{alwayssucceeds}{Always succeeds}
+			\hfill
+			\tikzmarknode{alwaysfails}{Always fails}
+		\end{center}
+	}
+
+	\uncover<4->{
+		Expansion does not work here.
+	}
+
+	\uncover<5->{
+		Need to handle small-sized types separately {\tiny (not really ``all for one'')}.
+	}
+
+	\begin{tikzpicture}[remember picture, overlay]
+		\draw<3->[->] (has-disequality-alpha2) to (alwayssucceeds);
+		\draw<3->[->] (has-disequality-alpha1) to (alwaysfails);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Compilation}
+
+	\begin{enumerate}
+		\item Calculate type sizes
+		\item<2-> Replace polymorphic relation \tikzmarknode{monomorphic-relation-calls}{calls} with concrete (monomorphic) relation calls
+			\begin{itemize}
+				\item Large-enough calls all use the same relation
+			\end{itemize}
+		\item<3-> Expand monomorphic relation calls back to the right types
+			\begin{itemize}
+				\item By generating vanilla semiringKanren code
+			\end{itemize}
+	\end{enumerate}
+
+	\uncover<4->{More details in the paper!}
+
+\end{frame}
+
 
 \end{document}
