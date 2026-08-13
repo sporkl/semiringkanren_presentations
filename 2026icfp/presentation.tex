@@ -363,26 +363,36 @@
 			&\quad\quad\quad\quad\texttt{(== y (left b))))\tikzmarknode{rightleftsoutheast}{}))} \\
 		\end{aligned}
 		&&
-		\begin{bmatrix}
-			\tikzmarknode{left0left0}{0} & 0 & \tikzmarknode{left0left2}{0} & \tikzmarknode{left0right0}{1} & 0 & \tikzmarknode{left0right2}{0} \\
-			0 & 0 & 0 & 0 & 1 & 0 \\
-			\tikzmarknode{left2left0}{0} & 0 & 0 & 0 & 0 & \tikzmarknode{left2right2}{1} \\
-			\tikzmarknode{right0left0}{1} & 0 & 0 & 0 & 0 & 0 \\
-			0 & 1 & 0 & 0 & 0 & 0 \\
-			\tikzmarknode{right2left0}{0} & 0 & \tikzmarknode{right2left2}{1} & 0 & 0 & 0 \\
-		\end{bmatrix}
+		\begin{aligned}
+			\begin{bmatrix}
+				\tikzmarknode{left0left0}{0} & 0 & \tikzmarknode{left0left2}{0} & \tikzmarknode{left0right0}{1} & 0 & \tikzmarknode{left0right2}{0} \\
+				0 & 0 & 0 & 0 & 1 & 0 \\
+				\tikzmarknode{left2left0}{0} & 0 & 0 & 0 & 0 & \tikzmarknode{left2right2}{1} \\
+				\tikzmarknode{right0left0}{1} & 0 & 0 & 0 & 0 & 0 \\
+				0 & 1 & 0 & 0 & 0 & 0 \\
+				\tikzmarknode{right2left0}{0} & 0 & \tikzmarknode{right2left2}{1} & 0 & 0 & 0 \\
+			\end{bmatrix} \\
+			\only<2>{
+				x \mapsto \texttt{(left 0)} \\
+				y \mapsto \texttt{(right 0)}
+			}
+			\only<3>{
+				x \mapsto \texttt{(right 2)} \\
+				y \mapsto \texttt{(left 2)}
+			}
+		\end{aligned}
 	\end{align*}
 
 	\begin{tikzpicture}[remember picture, overlay]
-		\node<2>[draw=orange, rectangle, fit=(leftrightnorthwest) (leftrightsoutheast), inner sep=0.5mm] {};
-		\node<2>[draw=orange, rectangle, fit=(left0right0) (left2right2), inner sep=0.5mm] {};
-		\draw<2>[blue, decorate, decoration=brace] ([xshift=-2mm] left2left0.south west) to node[left]{left} ([xshift=-2mm] left0left0.north west);
-		\draw<2>[blue, decorate, decoration=brace] ([yshift=1mm] left0right0.north west) to node[above]{right} ([yshift=1mm] left0right2.north east);
+		\node<2>[draw=orange, rectangle, fit=(left0right0)] {};
 
-		\node<3>[draw=orange, rectangle, fit=(rightleftnorthwest) (rightleftsoutheast), inner sep=0.5mm] {};
-		\node<3>[draw=orange, rectangle, fit=(right0left0) (right2left2), inner sep=0.5mm] {};
-		\draw<3>[blue, decorate, decoration=brace] ([xshift=-2mm] right2left0.south west) to node[left]{right} ([xshift=-2mm] right0left0.north west);
-		\draw<3>[blue, decorate, decoration=brace] ([yshift=1mm] left0left0.north west) to node[above]{left} ([yshift=1mm] left0left2.north east);
+		\node<3>[draw=orange, rectangle, fit=(right2left2)] {};
+
+		\node<4>[draw=orange, rectangle, fit=(left0right0) (left2right2), inner sep=0.5mm] {};
+		\node<4>[draw=orange, rectangle, fit=(leftrightnorthwest) (leftrightsoutheast), inner sep=0.5mm] {};
+
+		\node<5>[draw=orange, rectangle, fit=(right0left0) (right2left2), inner sep=0.5mm] {};
+		\node<5>[draw=orange, rectangle, fit=(rightleftnorthwest) (rightleftsoutheast), inner sep=0.5mm] {};
 	\end{tikzpicture}
 
 \end{frame}
@@ -391,41 +401,50 @@
 	
 	\begin{align*}
 		\begin{aligned}
-			&\texttt{(defrel (sum-swap-3-4} \\
-			&\quad\texttt{(x : (Sum (Num 3) (Num 4)))} \\
-			&\quad\texttt{(y : (Sum (Num 4) (Num 3))))} \\
+			&\texttt{(defrel (sum-swap-3-\tikzmarknode{defrel4}{4}} \\
+			&\quad\texttt{(x : (Sum (Num 3) (Num \tikzmarknode{x4}{4})))} \\
+			&\quad\texttt{(y : (Sum (Num \tikzmarknode{y4}{4}) (Num 3))))} \\
 			&\quad\texttt{(disj} \\
 			&\quad\quad\texttt{\tikzmarknode{leftrightnorthwest}{\vphantom{|}}(fresh (a : (Num 3))} \\
 			&\quad\quad\quad\texttt{(conj} \\
 			&\quad\quad\quad\quad\texttt{(== x (left a))} \\
 			&\quad\quad\quad\quad\texttt{(== y (right a))))\tikzmarknode{leftrightsoutheast}{}} \\
-			&\quad\quad\texttt{\tikzmarknode{rightleftnorthwest}{\vphantom{|}}(fresh (b : (Num 4))} \\
+			&\quad\quad\texttt{\tikzmarknode{rightleftnorthwest}{\vphantom{|}}(fresh (b : (Num \tikzmarknode{b4}{4}))} \\
 			&\quad\quad\quad\texttt{(conj} \\
 			&\quad\quad\quad\quad\texttt{(== x (right b))} \\
 			&\quad\quad\quad\quad\texttt{(== y (left b))))\tikzmarknode{rightleftsoutheast}{}))} \\
 		\end{aligned}
 		&&
-		\begin{bmatrix}
-			\tikzmarknode{left0left0}{0} & 0 & 0 & \tikzmarknode{left0left3}{0} & \tikzmarknode{left0right0}{1} & 0 & \tikzmarknode{left0right2}{0} \\
-			0 & 0 & 0 & 0 & 0 & 1 & 0 \\
-			\tikzmarknode{left2left0}{0} & 0 & 0 & 0 & 0 & 0 & \tikzmarknode{left2right2}{1} \\
-			\tikzmarknode{right0left0}{1} & 0 & 0 & 0 & 0 & 0 & 0 \\
-			0 & 1 & 0 & 0 & 0 & 0 & 0 \\
-			0 & 0 & 1 & 0 & 0 & 0 & 0 \\
-			\tikzmarknode{right2left0}{0} & 0 & 0 & \tikzmarknode{right3left3}{1} & 0 & 0 & 0 \\
-		\end{bmatrix}
+		\begin{aligned}
+			\begin{bmatrix}
+				\tikzmarknode{left0left0}{0} & 0 & 0 & \tikzmarknode{left0left3}{0} & \tikzmarknode{left0right0}{1} & 0 & \tikzmarknode{left0right2}{0} \\
+				0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+				\tikzmarknode{left2left0}{0} & 0 & 0 & 0 & 0 & 0 & \tikzmarknode{left2right2}{1} \\
+				\tikzmarknode{right0left0}{1} & 0 & 0 & 0 & 0 & 0 & 0 \\
+				0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+				0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+				\tikzmarknode{right2left0}{0} & 0 & 0 & \tikzmarknode{right3left3}{1} & 0 & 0 & 0 \\
+			\end{bmatrix} \\
+			\only<3>{
+				x \mapsto \texttt{(left 0)} \\
+				y \mapsto \texttt{(right 0)}
+			}
+			\only<4>{
+				x \mapsto \texttt{(right 3)} \\
+				y \mapsto \texttt{(left 3)}
+			}
+		\end{aligned}
 	\end{align*}
 
 	\begin{tikzpicture}[remember picture, overlay]
-		\node<2>[draw=orange, rectangle, fit=(leftrightnorthwest) (leftrightsoutheast), inner sep=0.5mm] {};
-		\node<2>[draw=orange, rectangle, fit=(left0right0) (left2right2), inner sep=0.5mm] {};
-		\draw<2>[blue, decorate, decoration=brace] ([xshift=-2mm] left2left0.south west) to node[left]{left} ([xshift=-2mm] left0left0.north west);
-		\draw<2>[blue, decorate, decoration=brace] ([yshift=1mm] left0right0.north west) to node[above]{right} ([yshift=1mm] left0right2.north east);
+		\node<2>[draw=orange, rectangle, fit=(defrel4), inner sep=0.5mm] {};
+		\node<2>[draw=orange, rectangle, fit=(x4), inner sep=0.5mm] {};
+		\node<2>[draw=orange, rectangle, fit=(y4), inner sep=0.5mm] {};
+		\node<2>[draw=orange, rectangle, fit=(b4), inner sep=0.5mm] {};
+		
+		\node<3>[draw=orange, rectangle, fit=(left0right0)] {};
 
-		\node<3>[draw=orange, rectangle, fit=(rightleftnorthwest) (rightleftsoutheast), inner sep=0.5mm] {};
-		\node<3>[draw=orange, rectangle, fit=(right0left0) (right3left3), inner sep=0.5mm] {};
-		\draw<3>[blue, decorate, decoration=brace] ([xshift=-2mm] right2left0.south west) to node[left]{right} ([xshift=-2mm] right0left0.north west);
-		\draw<3>[blue, decorate, decoration=brace] ([yshift=1mm] left0left0.north west) to node[above]{left} ([yshift=1mm] left0left3.north east);
+		\node<4>[draw=orange, rectangle, fit=(right3left3)] {};
 	\end{tikzpicture}
 
 \end{frame}
@@ -458,6 +477,137 @@
 			& & & & & & \\
 		\end{bmatrix}
 	\end{align*}
+
+\end{frame}
+
+\againframe{slogan}
+
+\begin{frame}{Expanding sum swap}
+	
+	\begin{align*}
+		\begin{bmatrix}
+			\tikzmarknode{33left0left0}{0} & 0 & \tikzmarknode{33left0left2}{0} & \tikzmarknode{33left0right0}{1} & \tikzmarknode{33left0right1}{0} & \tikzmarknode{33left0right2}{0} \\
+			0 & 0 & 0 & \tikzmarknode{33left1right0}{0} & 1 & \tikzmarknode{33left1right2}{0} \\
+			0 & 0 & \tikzmarknode{33left2left2}{0} & \tikzmarknode{33left2right0}{0} & \tikzmarknode{33left2right1}{0} & \tikzmarknode{33left2right2}{1} \\
+			\tikzmarknode{33right0left0}{1} & \tikzmarknode{33right0left1}{0} & \tikzmarknode{33right0left2}{0} & \tikzmarknode{33right0right0}{0} & 0 & 0 \\
+			\tikzmarknode{33right1left0}{0} & 1 & \tikzmarknode{33right1left2}{0} & 0 & 0 & 0 \\
+			\tikzmarknode{33right2left0}{0} & \tikzmarknode{33right2left1}{0} & \tikzmarknode{33right2left2}{1} & 0 & 0 & \tikzmarknode{33right2right2}{0} \\
+		\end{bmatrix}
+		&\leadsto
+		\begin{bmatrix}
+			\tikzmarknode{34left0left0}{0} & 0 & 0 & \tikzmarknode{34left0left3}{0} & \tikzmarknode{34left0right0}{1} & \tikzmarknode{34left0right1}{0} & \tikzmarknode{34left0right2}{0} \\
+			0 & 0 & 0 & 0 & \tikzmarknode{34left1right0}{0} & 1 & \tikzmarknode{34left1right2}{0} \\
+			0 & 0 & 0 & \tikzmarknode{34left2left3}{0} & \tikzmarknode{34left2right0}{0} & \tikzmarknode{34left2right1}{0} & \tikzmarknode{34left2right2}{1} \\
+			\tikzmarknode{34right0left0}{1} & \tikzmarknode{34right0left1}{0} & 0 & \tikzmarknode{34right0left3}{0} & \tikzmarknode{34right0right0}{0} & 0 & 0 \\
+			\tikzmarknode{34right1left0}{0} & 1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 0 & 1 & \tikzmarknode{34right2left3}{0} & 0 & 0 & 0 \\
+			\tikzmarknode{34right3left0}{0} & 0 & \tikzmarknode{34right3left2}{0} & \tikzmarknode{34right3left3}{1} & 0 & 0 & \tikzmarknode{34right3right2}{0} \\
+		\end{bmatrix}
+	\end{align*}
+
+	\only<2>{
+		Fails for:
+		\begin{align*}
+			x \mapsto \texttt{(left \underline{\phantom{W}}\(_\alpha\))} \\
+			y \mapsto \texttt{(left \underline{\phantom{W}}\(_\beta\))} \\
+		\end{align*}
+	}
+
+	\only<3>{
+		Fails for:
+		\begin{align*}
+			x \mapsto \texttt{(right \underline{\phantom{W}}\(_\beta\))} \\
+			y \mapsto \texttt{(right \underline{\phantom{W}}\(_\alpha\))} \\
+		\end{align*}
+	}
+
+	\only<4>{
+		Succeeds for: 
+		\begin{align*}
+			\tikzmarknode{xleft0succeeds}{x \mapsto \texttt{(left \underline{0})}} \\
+			\tikzmarknode{yright0succeeds}{y \mapsto \texttt{(right \underline{0})}} \\
+		\end{align*}
+	}
+
+	\only<5>{
+		Succeeds for: 
+		\begin{align*}
+			\tikzmarknode{xleftalphasucceeds}{x \mapsto \texttt{(left \underline{\phantom{W}}\(_\alpha\))}} \\
+			\tikzmarknode{yrightalphasucceeds}{y \mapsto \texttt{(right \underline{\phantom{W}}\(_\alpha\))}} \\
+		\end{align*}
+	}
+	
+	\only<6>{
+		Fails for:
+		\begin{align*}
+			\tikzmarknode{xleft0fails}{x \mapsto \texttt{(left \underline{0})}} \\
+			\tikzmarknode{yright2fails}{y \mapsto \texttt{(right \underline{2})}} \\
+		\end{align*}
+	}
+
+	\only<7>{
+		Fails for: 
+		\begin{align*}
+			\tikzmarknode{xleftalphafails}{x \mapsto \texttt{(left \underline{\phantom{W}}\(_\alpha\))}} \\
+			\tikzmarknode{yrightalphafails}{y \mapsto \texttt{(right \underline{\phantom{W}}\(_\alpha\))}} \\
+		\end{align*}
+	}
+
+	\only<8>{
+		Succeeds for: 
+		\begin{align*}
+			\tikzmarknode{xrightbetasucceeds}{x \mapsto \texttt{(right \underline{\phantom{W}}\(_\beta\))}} \\
+			\tikzmarknode{yleftbetasucceeds}{y \mapsto \texttt{(left \underline{\phantom{W}}\(_\beta\))}} \\
+		\end{align*}
+	}
+
+	\only<9>{
+		Fails for: 
+		\begin{align*}
+			\tikzmarknode{xrightbetafails}{x \mapsto \texttt{(right \underline{\phantom{W}}\(_\beta\))}} \\
+			\tikzmarknode{yleftbetafails}{y \mapsto \texttt{(left \underline{\phantom{W}}\(_\beta\))}} \\
+		\end{align*}
+	}
+
+	\begin{tikzpicture}[remember picture, overlay]
+
+		\node<2>[draw=orange, rectangle, fit=(33left0left0) (33left2left2), inner sep=0.5mm] {};
+		\node<2>[draw=orange, rectangle, fit=(34left0left0) (34left2left3), inner sep=0.5mm] {};
+
+		\node<3>[draw=orange, rectangle, fit=(33right0right0) (33right2right2), inner sep=0.5mm] {};
+		\node<3>[draw=orange, rectangle, fit=(34right0right0) (34right3right2), inner sep=0.5mm] {};
+
+		\node<4>[draw=orange, rectangle, fit=(33left0right0), inner sep=0.5mm] {};
+		\node<4>[draw=orange, rectangle, fit=(34left0right0), inner sep=0.5mm] {};
+		\draw<4>[decorate, decoration=brace] (xleft0succeeds.north east) to node[right]{\(\alpha\)-typed parts equal} (yright0succeeds.south east);
+
+		\node<5>[draw=orange, rectangle, rotate fit=45, fit=(33left0right0) (33left2right2), inner sep=0.5mm] {};
+		\node<5>[draw=orange, rectangle, rotate fit=45, fit=(34left0right0) (34left2right2), inner sep=0.5mm] {};
+		\draw<5>[decorate, decoration=brace] (xleftalphasucceeds.north east) to node[right]{\(\alpha\)-typed parts equal} (yrightalphasucceeds.south east);
+
+		\node<6>[draw=orange, rectangle, fit=(33left0right2), inner sep=0.5mm] {};
+		\node<6>[draw=orange, rectangle, fit=(34left0right2), inner sep=0.5mm] {};
+		\draw<6>[decorate, decoration=brace] (xleft0fails.north east) to node[right]{\(\alpha\)-typed parts disequal} (yright2fails.south east);
+
+		\node<7>[draw=orange, rectangle, rotate fit=45, fit=(33left0right1) (33left0right2) (33left1right2), inner sep=0.5mm] {};
+		\node<7>[draw=orange, rectangle, rotate fit=45, fit=(33left1right0) (33left2right0) (33left2right1), inner sep=0.5mm] {};
+		\node<7>[draw=orange, rectangle, rotate fit=45, fit=(34left0right1) (34left0right2) (34left1right2), inner sep=0.5mm] {};
+		\node<7>[draw=orange, rectangle, rotate fit=45, fit=(34left1right0) (34left2right0) (34left2right1), inner sep=0.5mm] {};
+		\draw<7>[decorate, decoration=brace] (xleftalphafails.north east) to node[right]{\(\alpha\)-typed parts disequal} (yrightalphafails.south east);
+
+		\node<8>[draw=orange, rectangle, rotate fit=45, fit=(33right0left0) (33right2left2), inner sep=0.5mm] {};
+		\node<8>[draw=orange, rectangle, rotate fit=45, fit=(34right0left0) (34right3left3), inner sep=0.5mm] {};
+		\draw<8>[decorate, decoration=brace] (xrightbetasucceeds.north east) to node[right]{\(\beta\)-typed parts equal} (yleftbetasucceeds.south east);
+
+		\node<9>[draw=orange, rectangle, rotate fit=45, fit=(33right0left1) (33right0left2) (33right1left2), inner sep=0.5mm] {};
+		\node<9>[draw=orange, rectangle, rotate fit=45, fit=(33right1left0) (33right2left0) (33right2left1), inner sep=0.5mm] {};
+		% \node<9>[draw=orange, rectangle, rotate fit=45, fit=(34right0left1) (34right0left3) (34right2left3), inner sep=0.5mm] {};
+		\draw<9>[orange] (34right0left1.north west) to (34right0left3.north east) to (34right2left3.south east) to (34right2left3.south west) to (34right0left1.south west) to cycle;
+		% \node<9>[draw=orange, rectangle, rotate fit=45, fit=(34right1left0) (34right3left0) (34right3left2), inner sep=0.5mm] {};
+		\draw<9>[orange](34right1left0.north west) to (34right3left0.south west) to (34right3left2.south east) to (34right3left2.north east) to (34right1left0.north east) to cycle;
+		\draw<9>[decorate, decoration=brace] (xrightbetafails.north east) to node[right]{\(\beta\)-typed parts disequal} (yleftbetafails.south east);
+
+	\end{tikzpicture}
 
 \end{frame}
 
