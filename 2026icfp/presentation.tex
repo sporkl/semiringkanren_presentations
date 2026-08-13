@@ -249,7 +249,7 @@
 		&\quad\quad \texttt{(conj \tikzmarknode{23from}{(== from 2)} \tikzmarknode{23to}{(== to 3)})))}\tikzmarknode{23fromto}{} \\
 	\end{align*}
 
-	\only<+>{
+	\only<1>{
 		\begin{align*}
 			\tikzmarknode{01frommat}{\begin{bmatrix} 1 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
 			*
@@ -259,7 +259,7 @@
 		\end{align*}
 	}
 	
-	\only<+>{
+	\only<2>{
 		\begin{align*}
 			\tikzmarknode{10frommat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 1 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
 			*
@@ -269,7 +269,7 @@
 		\end{align*}
 	}
 
-	\only<+>{
+	\only<3>{
 		\begin{align*}
 			\tikzmarknode{21frommat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
 			*
@@ -279,7 +279,7 @@
 		\end{align*}
 	}
 
-	\only<+>{
+	\only<4>{
 		\begin{align*}
 			\tikzmarknode{23frommat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 1 & 1 & 1 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
 			*
@@ -289,7 +289,7 @@
 		\end{align*}
 	}
 
-	\only<+>{
+	\only<5>{
 		\begin{align*}
 			\tikzmarknode{01fromtomat}{\begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
 			+
@@ -297,13 +297,13 @@
 			+
 			\tikzmarknode{21fromtomat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
 			+
-			\tikzmarknode{23fromtomat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}}
+			\tikzmarknode{23fromtomat}{\begin{bmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 \end{bmatrix}}
 		\end{align*}
 	}
 
-	\only<+>{
+	\only<6>{
 		\begin{align*}
-			\begin{bmatrix} 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}
+			\begin{bmatrix} 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 1 \\ 0 & 0 & 0 & 0 \end{bmatrix}
 			&&
 			\text{\tikz \graph[edges={bend left}] { 0 -> 1 <- 2 -> 3, 1 -> 0 };}
 		\end{align*}
@@ -343,6 +343,122 @@
 
 \begin{frame}
 	\tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}{Sum swap}
+	
+	\begin{align*}
+		\begin{aligned}
+			&\texttt{(defrel (sum-swap-3-3} \\
+			&\quad\texttt{(x : (Sum (Num 3) (Num 3)))} \\
+			&\quad\texttt{(y : (Sum (Num 3) (Num 3))))} \\
+			&\quad\texttt{(disj} \\
+			&\quad\quad\texttt{\tikzmarknode{leftrightnorthwest}{\vphantom{|}}(fresh (a : (Num 3))} \\
+			&\quad\quad\quad\texttt{(conj} \\
+			&\quad\quad\quad\quad\texttt{(== x (left a))} \\
+			&\quad\quad\quad\quad\texttt{(== y (right a))))\tikzmarknode{leftrightsoutheast}{}} \\
+			&\quad\quad\texttt{\tikzmarknode{rightleftnorthwest}{\vphantom{|}}(fresh (b : (Num 3))} \\
+			&\quad\quad\quad\texttt{(conj} \\
+			&\quad\quad\quad\quad\texttt{(== x (right b))} \\
+			&\quad\quad\quad\quad\texttt{(== y (left b))))\tikzmarknode{rightleftsoutheast}{}))} \\
+		\end{aligned}
+		&&
+		\begin{bmatrix}
+			\tikzmarknode{left0left0}{0} & 0 & \tikzmarknode{left0left2}{0} & \tikzmarknode{left0right0}{1} & 0 & \tikzmarknode{left0right2}{0} \\
+			0 & 0 & 0 & 0 & 1 & 0 \\
+			\tikzmarknode{left2left0}{0} & 0 & 0 & 0 & 0 & \tikzmarknode{left2right2}{1} \\
+			\tikzmarknode{right0left0}{1} & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 & 0 & 0 \\
+			\tikzmarknode{right2left0}{0} & 0 & \tikzmarknode{right2left2}{1} & 0 & 0 & 0 \\
+		\end{bmatrix}
+	\end{align*}
+
+	\begin{tikzpicture}[remember picture, overlay]
+		\node<2>[draw=orange, rectangle, fit=(leftrightnorthwest) (leftrightsoutheast), inner sep=0.5mm] {};
+		\node<2>[draw=orange, rectangle, fit=(left0right0) (left2right2), inner sep=0.5mm] {};
+		\draw<2>[blue, decorate, decoration=brace] ([xshift=-2mm] left2left0.south west) to node[left]{left} ([xshift=-2mm] left0left0.north west);
+		\draw<2>[blue, decorate, decoration=brace] ([yshift=1mm] left0right0.north west) to node[above]{right} ([yshift=1mm] left0right2.north east);
+
+		\node<3>[draw=orange, rectangle, fit=(rightleftnorthwest) (rightleftsoutheast), inner sep=0.5mm] {};
+		\node<3>[draw=orange, rectangle, fit=(right0left0) (right2left2), inner sep=0.5mm] {};
+		\draw<3>[blue, decorate, decoration=brace] ([xshift=-2mm] right2left0.south west) to node[left]{right} ([xshift=-2mm] right0left0.north west);
+		\draw<3>[blue, decorate, decoration=brace] ([yshift=1mm] left0left0.north west) to node[above]{left} ([yshift=1mm] left0left2.north east);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Larger sum swap}
+	
+	\begin{align*}
+		\begin{aligned}
+			&\texttt{(defrel (sum-swap-3-4} \\
+			&\quad\texttt{(x : (Sum (Num 3) (Num 4)))} \\
+			&\quad\texttt{(y : (Sum (Num 4) (Num 3))))} \\
+			&\quad\texttt{(disj} \\
+			&\quad\quad\texttt{\tikzmarknode{leftrightnorthwest}{\vphantom{|}}(fresh (a : (Num 3))} \\
+			&\quad\quad\quad\texttt{(conj} \\
+			&\quad\quad\quad\quad\texttt{(== x (left a))} \\
+			&\quad\quad\quad\quad\texttt{(== y (right a))))\tikzmarknode{leftrightsoutheast}{}} \\
+			&\quad\quad\texttt{\tikzmarknode{rightleftnorthwest}{\vphantom{|}}(fresh (b : (Num 4))} \\
+			&\quad\quad\quad\texttt{(conj} \\
+			&\quad\quad\quad\quad\texttt{(== x (right b))} \\
+			&\quad\quad\quad\quad\texttt{(== y (left b))))\tikzmarknode{rightleftsoutheast}{}))} \\
+		\end{aligned}
+		&&
+		\begin{bmatrix}
+			\tikzmarknode{left0left0}{0} & 0 & 0 & \tikzmarknode{left0left3}{0} & \tikzmarknode{left0right0}{1} & 0 & \tikzmarknode{left0right2}{0} \\
+			0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+			\tikzmarknode{left2left0}{0} & 0 & 0 & 0 & 0 & 0 & \tikzmarknode{left2right2}{1} \\
+			\tikzmarknode{right0left0}{1} & 0 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+			\tikzmarknode{right2left0}{0} & 0 & 0 & \tikzmarknode{right3left3}{1} & 0 & 0 & 0 \\
+		\end{bmatrix}
+	\end{align*}
+
+	\begin{tikzpicture}[remember picture, overlay]
+		\node<2>[draw=orange, rectangle, fit=(leftrightnorthwest) (leftrightsoutheast), inner sep=0.5mm] {};
+		\node<2>[draw=orange, rectangle, fit=(left0right0) (left2right2), inner sep=0.5mm] {};
+		\draw<2>[blue, decorate, decoration=brace] ([xshift=-2mm] left2left0.south west) to node[left]{left} ([xshift=-2mm] left0left0.north west);
+		\draw<2>[blue, decorate, decoration=brace] ([yshift=1mm] left0right0.north west) to node[above]{right} ([yshift=1mm] left0right2.north east);
+
+		\node<3>[draw=orange, rectangle, fit=(rightleftnorthwest) (rightleftsoutheast), inner sep=0.5mm] {};
+		\node<3>[draw=orange, rectangle, fit=(right0left0) (right3left3), inner sep=0.5mm] {};
+		\draw<3>[blue, decorate, decoration=brace] ([xshift=-2mm] right2left0.south west) to node[left]{right} ([xshift=-2mm] right0left0.north west);
+		\draw<3>[blue, decorate, decoration=brace] ([yshift=1mm] left0left0.north west) to node[above]{left} ([yshift=1mm] left0left3.north east);
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Polymorphic sum swap}
+
+	\begin{align*}
+		\begin{aligned}
+			&\texttt{(defrel (sum-swap} \\
+			&\quad\texttt{(x : (Sum \(\alpha\) \(\beta\)))} \\
+			&\quad\texttt{(y : (Sum \(\beta\) \(\alpha\))))} \\
+			&\quad\texttt{(disj} \\
+			&\quad\quad\texttt{(fresh (a : \(\alpha\))} \\
+			&\quad\quad\quad\texttt{(conj} \\
+			&\quad\quad\quad\quad\texttt{(== x (left a))} \\
+			&\quad\quad\quad\quad\texttt{(== y (right a))))} \\
+			&\quad\quad\texttt{(fresh (b : \(\beta\))} \\
+			&\quad\quad\quad\texttt{(conj} \\
+			&\quad\quad\quad\quad\texttt{(== x (right b))} \\
+			&\quad\quad\quad\quad\texttt{(== y (left b))))))} \\
+		\end{aligned}
+		&&
+		\begin{bmatrix}
+			& & & & & & \\
+			& & & & & & \\
+			& & & & & & \\
+			& & & \text{\Huge ?} & & & \\
+			& & & & & & \\
+			& & & & & & \\
+			& & & & & & \\
+		\end{bmatrix}
+	\end{align*}
+
 \end{frame}
 
 \begin{frame}
