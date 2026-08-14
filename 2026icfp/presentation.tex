@@ -1,5 +1,5 @@
 \documentclass{beamer}
-\useoutertheme{tree}
+\useoutertheme{split}
 
 \usepackage{amsmath}
 
@@ -9,14 +9,35 @@
 \usetikzlibrary{fit}
 \usetikzlibrary{graphs}
 
-\title{All for one and none forall: Compiling polymorphic relations without monomorphization}
+\title{All for one and none forall}
+\subtitle{Compiling polymorphic relations without monomorphization}
 \author{Dmitri Volkov, Yafei Yang, Chung-chieh Shan}
 \date{2026 August 24}
 
 \begin{document}
 
+\section{}
+
 \begin{frame}[plain]
 	\titlepage
+\end{frame}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+\begin{frame}
+	
+	semiringKanren represents relations as finite multidimensional arrays.\\
+
+	\vspace{1ex}
+
+	Polymorphic relations need to represent arbitrarily many specifically-typed relations.\\
+
+	\vspace{1ex}
+
+	How to do both?\\
+
 \end{frame}
 
 \begin{frame}[label=slogan]
@@ -89,10 +110,12 @@
 		\end{matrix}
 	\end{align*}
 
-	Represent graphs as relations or as adjacency matries.\\
+	Represent graphs as relations or as adjacency matrices.\\
 	semiringKanren computes matrices for arbitrary relations!
 
 \end{frame}
+
+\subsection{Goals}
 
 \begin{frame}{Primitive relations}
 
@@ -217,6 +240,8 @@
 
 \end{frame}
 
+\subsection{Types}
+
 \begin{frame}{Types}
 
 	semiringKanren values inhabit finite algebraic data types.
@@ -238,7 +263,9 @@
 
 \end{frame}
 
-\begin{frame}{Representing relations}
+\subsection{Computing relations}
+
+\begin{frame}{Computing relations}
 
 	\begin{align*}
 		& \texttt{(defrel (graph (from : (Num 4)) (to : (Num 4)))} \\
@@ -344,6 +371,8 @@
 \begin{frame}
 	\tableofcontents[currentsection]
 \end{frame}
+
+\subsection{Sum swap}
 
 \begin{frame}{Sum swap}
 	
@@ -480,6 +509,8 @@
 	\end{align*}
 
 \end{frame}
+
+\subsection{Expanding sum swap}
 
 \againframe{slogan}
 
@@ -850,7 +881,7 @@
 
 	\uncover<2->{
 		\begin{align*}
-			\alpha = 2 && \alpha = 1 \\
+			\alpha = \texttt{(Num 2)} && \alpha = \texttt{(Num 1)} \\
 			\tikzmarknode{has-disequality-alpha2}{\begin{bmatrix} 1 & 1 \end{bmatrix}} && \tikzmarknode{has-disequality-alpha1}{\begin{bmatrix} 0 \end{bmatrix}}
 		\end{align*}
 	}
@@ -878,6 +909,8 @@
 
 \end{frame}
 
+\subsection{Compilation}
+
 \begin{frame}{Compilation}
 
 	\begin{enumerate}
@@ -896,5 +929,26 @@
 
 \end{frame}
 
+\section{}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+\begin{frame}{Conclusion}
+
+	Represent the (dis)equality structure of relations compactly, and expand as needed.
+
+	\vspace{1ex}
+
+	\pause
+	Works because \texttt{==} and \texttt{=/=} are the only primitive relations.
+	
+	\vspace{1ex}
+	
+	\pause
+	Does this generalize?
+	
+\end{frame}
 
 \end{document}
