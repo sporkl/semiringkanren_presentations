@@ -26,6 +26,29 @@
 	\tableofcontents
 \end{frame}
 
+\begin{frame}{miniKanren vs. semiringKanren}
+
+	\begin{columns}
+		\column{0.5\textwidth}
+		miniKanren
+		\begin{itemize}
+			\item evaluation via stream search (top-down)
+			\item dyamically typed (s-expressions)
+			\item relations are unweighted (usually)
+		\end{itemize}
+
+		\column{0.5\textwidth}
+		semiringKanren
+		\begin{itemize}
+			\item evaluation via multidimensional array operations (bottom-up)
+			\item statically typed (finite algebraic data types)
+			\item relations are weighted
+		\end{itemize}
+
+	\end{columns}
+
+\end{frame}
+
 \begin{frame}
 	
 	semiringKanren represents relations as finite multidimensional arrays.\\
@@ -186,7 +209,7 @@
 
 	\begin{align*}
 		& \texttt{(defrel (r1 (x : (Num 4)) (y : (Num 4)))} \\
-		&\quad \texttt{(disj} \\
+		&\quad \texttt{(conj} \\
 		&\quad\quad \texttt{(== x 0)} \\
 		&\quad\quad \texttt{(== y 0)))} \\
 	\end{align*}
@@ -510,9 +533,19 @@
 
 \end{frame}
 
-\subsection{Expanding sum swap}
+\subsection{Expanding relations}
 
 \againframe{slogan}
+
+\begin{frame}{Expansion}
+
+	semiringKanren computes a small array, and \emph{expands} it.
+
+	\vspace{1ex}
+
+	Each expanded array entry adopts weight from a smaller array entry with the same \emph{equality pattern}.
+
+\end{frame}
 
 \begin{frame}{Expanding sum swap}
 	
@@ -871,6 +904,25 @@
 
 \end{frame}
 
+\subsection{Edge cases and compilation}
+
+\begin{frame}
+
+	We have:
+	\begin{itemize}
+		\item<1-> Computed non-polymorphic relations bottom-up
+		\item<2-> Compactly and concretely represented polymorphic relations 
+			\begin{itemize}
+				\item So can evaluate using the same methods as before
+			\end{itemize}
+	\end{itemize}
+
+	\vspace{1ex}
+
+	\uncover<3->{All done?}
+
+\end{frame}
+
 \begin{frame}{Has disequality}
 
 	\begin{align*}
@@ -899,7 +951,7 @@
 	}
 
 	\uncover<5->{
-		Need to handle small-sized types separately {\tiny (not really ``all for one'')}.
+		Need to handle small-sized types separately {\tiny (not ``all for one'', but almost)}.
 	}
 
 	\begin{tikzpicture}[remember picture, overlay]
@@ -909,23 +961,25 @@
 
 \end{frame}
 
-\subsection{Compilation}
-
 \begin{frame}{Compilation}
 
 	\begin{enumerate}
-		\item Calculate type sizes
-		\item<2-> Replace polymorphic relation \tikzmarknode{monomorphic-relation-calls}{calls} with concrete (monomorphic) relation calls
+		\item<2-> Calculate type sizes
+		\item<1-> Replace polymorphic relation \tikzmarknode{monomorphic-relation-calls}{calls} with concrete (monomorphic) relation calls
 			\begin{itemize}
 				\item Large-enough calls all use the same relation
+				\item Small calls use the correctly-sized monomorphic relation
 			\end{itemize}
-		\item<3-> Expand monomorphic relation calls back to the right types
-			\begin{itemize}
-				\item By generating vanilla semiringKanren code
-			\end{itemize}
+		\item<3-> Expand large-enough monomorphic relation calls back to the right types
 	\end{enumerate}
 
-	\uncover<4->{More details in the paper!}
+	\vspace{1ex}
+
+	\uncover<4->{All done by generating vanilla semiringKanren code}
+
+	\vspace{1ex}
+
+	\uncover<5->{More details in the paper!}
 
 \end{frame}
 
@@ -948,6 +1002,14 @@
 	
 	\pause
 	Does this generalize?
+
+	\begin{itemize}
+		\item To more than 2 arguments/array dimensions? (hint: yes)
+		\item To recursive relations? (hint: yes)
+		\item To more than \texttt{==} and \texttt{=/=}?
+		\item To recursive data types?
+		\item To non-relational languages?
+	\end{itemize}
 	
 \end{frame}
 
