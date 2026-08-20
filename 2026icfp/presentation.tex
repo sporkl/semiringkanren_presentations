@@ -33,7 +33,7 @@
 		miniKanren
 		\begin{itemize}
 			\item evaluation via stream search (top-down)
-			\item dyamically typed (s-expressions)
+			\item dynamically typed (s-expressions)
 			\item relations are unweighted (usually)
 		\end{itemize}
 
@@ -49,7 +49,13 @@
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Bottom-up polymorphism?}
+
+	Polymorphism: using the same code to operate on multiple types, here using \emph{type variables}.
+
+	\vspace{1ex}
+
+	\pause
 	
 	semiringKanren represents relations as finite multidimensional arrays.\\
 
@@ -58,6 +64,8 @@
 	Polymorphic relations need to represent arbitrarily many specifically-typed relations.\\
 
 	\vspace{1ex}
+
+	\pause
 
 	How to do both?\\
 
@@ -263,29 +271,6 @@
 
 \end{frame}
 
-\subsection{Types}
-
-\begin{frame}{Types}
-
-	semiringKanren values inhabit finite algebraic data types.
-
-	\begin{align*}
-		\texttt{(left 0) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} \tikzmarknode{sumleftentry}{1} & \tikzmarknode{sumleftexit}{0} & \tikzmarknode{sumrightentry}{0} & 0 & \tikzmarknode{sumrightexit}{0} \end{bmatrix} \\
-		\texttt{(left 1) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix} \\
-		\texttt{(right 0) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 1 & 0 & 0 \end{bmatrix} \\
-		\texttt{(right 1) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 0 & 1 & 0 \end{bmatrix} \\
-		\texttt{(right 2) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 0 & 0 & 1 \end{bmatrix} \\
-	\end{align*}
-
-	(semiringKanren also supports unit and product types)
-
-	\begin{tikzpicture}[remember picture, overlay]
-		\draw[decorate, decoration=brace] ([yshift=1mm] sumleftentry.north west) to node(sumleft)[above] {\vphantom{g}left} ([yshift=1mm] sumleftexit.north east);
-		\draw[decorate, decoration=brace] ([yshift=1mm] sumrightentry.north west) to node(sumright)[above] {\vphantom{g}right} ([yshift=1mm] sumrightexit.north east);
-	\end{tikzpicture}
-
-\end{frame}
-
 \subsection{Computing relations}
 
 \begin{frame}{Computing relations}
@@ -385,6 +370,29 @@
 		\draw<5>[->] (21fromto) to[out=-15, in=45] (21fromtomat.north east);
 		\draw<5>[->] (23fromto) to[bend left] (23fromtomat.north);
 
+	\end{tikzpicture}
+
+\end{frame}
+
+\subsection{Types}
+
+\begin{frame}{Types}
+
+	semiringKanren values inhabit finite algebraic data types.
+
+	\begin{align*}
+		\texttt{(left 0) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} \tikzmarknode{sumleftentry}{1} & \tikzmarknode{sumleftexit}{0} & \tikzmarknode{sumrightentry}{0} & 0 & \tikzmarknode{sumrightexit}{0} \end{bmatrix} \\
+		\texttt{(left 1) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix} \\
+		\texttt{(right 0) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 1 & 0 & 0 \end{bmatrix} \\
+		\texttt{(right 1) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 0 & 1 & 0 \end{bmatrix} \\
+		\texttt{(right 2) : (Sum (Num 2) (Num 3))} && \begin{bmatrix} 0 & 0 & 0 & 0 & 1 \end{bmatrix} \\
+	\end{align*}
+
+	(semiringKanren also supports unit and product types)
+
+	\begin{tikzpicture}[remember picture, overlay]
+		\draw[decorate, decoration=brace] ([yshift=1mm] sumleftentry.north west) to node(sumleft)[above] {\vphantom{g}left} ([yshift=1mm] sumleftexit.north east);
+		\draw[decorate, decoration=brace] ([yshift=1mm] sumrightentry.north west) to node(sumright)[above] {\vphantom{g}right} ([yshift=1mm] sumrightexit.north east);
 	\end{tikzpicture}
 
 \end{frame}
@@ -541,9 +549,30 @@
 
 	semiringKanren computes a small array, and \emph{expands} it.
 
-	\vspace{1ex}
+	\begin{align*}
+		\begin{bmatrix}
+			\tikzmarknode{33left0left0}{0} & 0 & \tikzmarknode{33left0left2}{0} & \tikzmarknode{33left0right0}{1} & \tikzmarknode{33left0right1}{0} & \tikzmarknode{33left0right2}{0} \\
+			0 & 0 & 0 & \tikzmarknode{33left1right0}{0} & 1 & \tikzmarknode{33left1right2}{0} \\
+			0 & 0 & \tikzmarknode{33left2left2}{0} & \tikzmarknode{33left2right0}{0} & \tikzmarknode{33left2right1}{0} & \tikzmarknode{33left2right2}{1} \\
+			\tikzmarknode{33right0left0}{1} & \tikzmarknode{33right0left1}{0} & \tikzmarknode{33right0left2}{0} & \tikzmarknode{33right0right0}{0} & 0 & 0 \\
+			\tikzmarknode{33right1left0}{0} & 1 & \tikzmarknode{33right1left2}{0} & 0 & 0 & 0 \\
+			\tikzmarknode{33right2left0}{0} & \tikzmarknode{33right2left1}{0} & \tikzmarknode{33right2left2}{1} & 0 & 0 & \tikzmarknode{33right2right2}{0} \\
+		\end{bmatrix}
+		&\leadsto
+		\begin{bmatrix}
+			\tikzmarknode{34left0left0}{0} & 0 & 0 & \tikzmarknode{34left0left3}{0} & \tikzmarknode{34left0right0}{1} & \tikzmarknode{34left0right1}{0} & \tikzmarknode{34left0right2}{0} \\
+			0 & 0 & 0 & 0 & \tikzmarknode{34left1right0}{0} & 1 & \tikzmarknode{34left1right2}{0} \\
+			0 & 0 & 0 & \tikzmarknode{34left2left3}{0} & \tikzmarknode{34left2right0}{0} & \tikzmarknode{34left2right1}{0} & \tikzmarknode{34left2right2}{1} \\
+			\tikzmarknode{34right0left0}{1} & \tikzmarknode{34right0left1}{0} & 0 & \tikzmarknode{34right0left3}{0} & \tikzmarknode{34right0right0}{0} & 0 & 0 \\
+			\tikzmarknode{34right1left0}{0} & 1 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 0 & 1 & \tikzmarknode{34right2left3}{0} & 0 & 0 & 0 \\
+			\tikzmarknode{34right3left0}{0} & 0 & \tikzmarknode{34right3left2}{0} & \tikzmarknode{34right3left3}{1} & 0 & 0 & \tikzmarknode{34right3right2}{0} \\
+		\end{bmatrix}
+	\end{align*}
 
 	Each expanded array entry adopts weight from a smaller array entry with the same \emph{equality pattern}.
+
+	semiringKanren uses this to \emph{compile away} type variables.
 
 \end{frame}
 
@@ -923,7 +952,7 @@
 
 \end{frame}
 
-\begin{frame}{Has disequality}
+\begin{frame}{Expansion might not work}
 
 	\begin{align*}
 		&\texttt{(defrel (has-disequality (y : \(\alpha\)))} \\
@@ -980,6 +1009,34 @@
 	\vspace{1ex}
 
 	\uncover<5->{More details in the paper!}
+
+\end{frame}
+
+
+\begin{frame}{Compiling \texttt{equal}}
+
+	\texttt{(defrel (equal (x : \(\alpha\)) (y : \(\alpha\))) (== x y))}
+
+	\vspace{1ex}
+
+	\texttt{(equal 3\(_\mathtt{4}\) 3\(_\mathtt{4}\))} becomes:
+
+	\vspace{1ex}
+	
+	\texttt{(fresh ((x1 : (Num 4)) (y1 : (Num 4))}
+	\quad\texttt{(x2 : (Num 2)) (y2 : (Num 2)))}
+
+	\quad\texttt{(conj}
+
+	\quad\quad\texttt{(== x1 3\(_\mathtt{4}\)) (== y1 3\(_\mathtt{4}\))}
+
+	\quad\quad\texttt{(equal\(_{\alpha \mapsto \texttt{(Num 2)}}\) x2 y2)}
+
+	\quad\quad\texttt{(disj}
+
+	\quad\quad\quad\texttt{(conj (== x1 y1) (== x2 y2))}
+
+	\quad\quad\quad\texttt{(conj (=/= x1 y1) (=/= x2 y2)))))}
 
 \end{frame}
 
